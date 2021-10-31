@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Models;
 
@@ -41,81 +42,31 @@ namespace WebBanHang.Controllers
             return binhLuan;
         }
 
-        // PUT: api/BinhLuan/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBinhLuan(int id, BinhLuan binhLuan)
+        // POST: thêm bình luận - api/KhachHang/AddComment
+        [HttpPost("AddComment")]
+        public async Task<ActionResult<BinhLuan>> AddComment(BinhLuan insert)
         {
-            if (id != binhLuan.MaBl)
-            {
-                return BadRequest();
-            }
+            var MaSPParam = new SqlParameter("@MaSP", insert.MaSp);
+            var MaKHParam = new SqlParameter("@MaKhachHang", insert.MaKhachHang);
+            var NoiDungParam = new SqlParameter("@NoiDungBinhLuan", insert.NoiDungBinhLuan);
 
-            _context.Entry(binhLuan).State = EntityState.Modified;
+            await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertBL @MaSP, @MaKhachHang, @NoiDungBinhLuan",
+                    MaSPParam, MaKHParam, NoiDungParam);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BinhLuanExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            return Ok("Add Comment Success");
 
-            return NoContent();
         }
 
-        // POST: api/BinhLuan
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<BinhLuan>> PostBinhLuan(BinhLuan binhLuan)
+        // DELETE: xóa Danh mục - api/KhachHang/DeleteCategory/id
+        [HttpDelete("DeleteCategory/{id}")]
+        public async Task<ActionResult> DeleteCategory(int id)
         {
-            _context.BinhLuans.Add(binhLuan);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (BinhLuanExists(binhLuan.MaBl))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            var IdParam = new SqlParameter("@MaBL", id);
 
-            return CreatedAtAction("GetBinhLuan", new { id = binhLuan.MaBl }, binhLuan);
+            await _context.Database.ExecuteSqlRawAsync("exec Sp_DeleteBL @MaBL", IdParam);
+
+            return Ok("Delete Comment Success!");
         }
 
-        // DELETE: api/BinhLuan/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBinhLuan(int id)
-        {
-            var binhLuan = await _context.BinhLuans.FindAsync(id);
-            if (binhLuan == null)
-            {
-                return NotFound();
-            }
-
-            _context.BinhLuans.Remove(binhLuan);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool BinhLuanExists(int id)
-        {
-            return _context.BinhLuans.Any(e => e.MaBl == id);
-        }
     }
 }

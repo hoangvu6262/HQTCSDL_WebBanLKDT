@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Models;
 
@@ -41,81 +42,22 @@ namespace WebBanHang.Controllers
             return chiTietHoaDon;
         }
 
-        // PUT: api/ChiTietHoaDon/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutChiTietHoaDon(int id, ChiTietHoaDon chiTietHoaDon)
+        // POST: thêm Chi tiết hóa đơn - api/KhachHang/AddBillDetail
+        [HttpPost("AddBillDetail")]
+        public async Task<ActionResult<ChiTietHoaDon>> AddBillDetail(ChiTietHoaDon insert)
         {
-            if (id != chiTietHoaDon.MaCthd)
-            {
-                return BadRequest();
-            }
+            var MaSpParam = new SqlParameter("@MaSP", insert.MaSp);
+            var MaHoaDonParam = new SqlParameter("@MaHoaDon", insert.MaHoaDon);
+            var SoLuongParam = new SqlParameter("@Soluong", insert.SoLuong);
+            var DonGiaParam = new SqlParameter("@DonGia", insert.DonGia);
 
-            _context.Entry(chiTietHoaDon).State = EntityState.Modified;
+            await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertCTHD @MaSP, @MaHoaDon, @SoLuong, @DonGia",
+                    MaSpParam, MaHoaDonParam, SoLuongParam, DonGiaParam);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ChiTietHoaDonExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            return Ok("Add Bill Detail Success");
 
-            return NoContent();
         }
 
-        // POST: api/ChiTietHoaDon
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<ChiTietHoaDon>> PostChiTietHoaDon(ChiTietHoaDon chiTietHoaDon)
-        {
-            _context.ChiTietHoaDons.Add(chiTietHoaDon);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ChiTietHoaDonExists(chiTietHoaDon.MaCthd))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetChiTietHoaDon", new { id = chiTietHoaDon.MaCthd }, chiTietHoaDon);
-        }
-
-        // DELETE: api/ChiTietHoaDon/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteChiTietHoaDon(int id)
-        {
-            var chiTietHoaDon = await _context.ChiTietHoaDons.FindAsync(id);
-            if (chiTietHoaDon == null)
-            {
-                return NotFound();
-            }
-
-            _context.ChiTietHoaDons.Remove(chiTietHoaDon);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ChiTietHoaDonExists(int id)
-        {
-            return _context.ChiTietHoaDons.Any(e => e.MaCthd == id);
-        }
+        
     }
 }
