@@ -62,9 +62,9 @@ namespace WebBanHang.Controllers
         }
 
 
-        //GET: Lấy danh sách khách hàng phân trang - api/KhachHang/GetBillPagination?PageNumber=1&PageSize=10
-        [HttpGet("GetBillPagination")]
-        public async Task<IActionResult> GetBillPagination([FromQuery] PaginationFilter filter)
+        //GET: Lấy danh sách khách hàng phân trang - api/KhachHang/GetBillPaging?PageNumber=1&PageSize=10
+        [HttpGet("GetBillPaging")]
+        public async Task<IActionResult> GetBillPaging([FromQuery] PaginationFilter filter)
         {
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
 
@@ -107,9 +107,17 @@ namespace WebBanHang.Controllers
         {
             var IdParam = new SqlParameter("@MaHoaDon", id);
 
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_DeleteHD @MaHoaDon", IdParam);
+            if (await _context.HoaDons.FirstOrDefaultAsync(b => b.MaHoaDon == id) != null)
+            {
+                await _context.Database.ExecuteSqlRawAsync("exec Sp_DeleteHD @MaHoaDon", IdParam);
 
-            return Ok("Delete success!");
+                return Ok("Delete success!");
+            }
+            else
+            {
+                return BadRequest("Id is Invail.");
+            }
+                
         }
 
         // PUT: xác nhận khách hàng đã nhận dc hàng - api/HoaDon/PutConfirmReceived/{id}
@@ -118,8 +126,16 @@ namespace WebBanHang.Controllers
         {
             var MaHoaDonParam = new SqlParameter("@MaHoaDon", id);
 
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_CusConfir3 @MaHoaDon", MaHoaDonParam);
-            return Ok("Confirm success!");
+            if (await _context.HoaDons.FirstOrDefaultAsync(b => b.MaHoaDon == id) != null)
+            {
+                await _context.Database.ExecuteSqlRawAsync("exec Sp_CusConfir3 @MaHoaDon", MaHoaDonParam);
+                return Ok("Confirm success!");
+            }
+            else
+            {
+                return BadRequest("Id is Invail.");
+            }
+                
         }
 
         // PUT: xác nhận khách hàng đã hủy đơn hàng - api/HoaDon/PutConfirmCanceled/{id}
@@ -128,9 +144,64 @@ namespace WebBanHang.Controllers
         {
             var MaHoaDonParam = new SqlParameter("@MaHoaDon", id);
 
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_CusConfir4 @MaHoaDon", MaHoaDonParam);
+            if (await _context.HoaDons.FirstOrDefaultAsync(b => b.MaHoaDon == id) != null)
+            {
+                await _context.Database.ExecuteSqlRawAsync("exec Sp_CusConfir4 @MaHoaDon", MaHoaDonParam);
 
-            return Ok("Confirm success!");
+                return Ok("Confirm success!");
+            }
+            else
+            {
+                return BadRequest("Id is Invail.");
+            }
+                
+        }
+
+        //PUT: duyệt đơn hàng - api/HoaDon/PutAdConfirm/id
+        [HttpPut("PutAdConfirm/{id}")]
+        public async Task<ActionResult> PutAdConfirm(int id)
+        {
+            var MaHoaDonParam = new SqlParameter("@MaHoaDon", id);
+
+            if (await _context.HoaDons.FirstOrDefaultAsync(b => b.MaHoaDon == id) != null)
+            {
+                await _context.Database.ExecuteSqlRawAsync("exec Sp_AdConfir @MaHoaDon", MaHoaDonParam);
+
+                return Ok("Confirm success!");
+            }
+            else
+            {
+                return BadRequest("Id is Invail.");
+            }
+            
+        }
+
+        // GET: Lấy danh sách hóa đơn chờ duyệt - api/HoaDon/GetBillByStatus
+        [HttpGet("GetBillByStatus")]
+        public async Task<ActionResult<IEnumerable<HoaDon>>> GetBillByStatus(int status)
+        {
+            if (status < 0 || status > 4)
+            {
+                return BadRequest("Status is from 1 to 4.");
+            }
+            else
+            {
+                switch (status) 
+                {
+                    case 1:
+                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD1]()").ToListAsync();                       
+                    case 2:
+                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD2]()").ToListAsync();
+                    case 3:
+                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD3]()").ToListAsync();
+                    case 4:
+                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD4]()").ToListAsync();
+                    default:
+                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD1]()").ToListAsync();
+
+                }
+            }
+            
         }
     }
 }

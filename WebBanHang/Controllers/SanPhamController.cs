@@ -62,9 +62,9 @@ namespace WebBanHang.Controllers
             return sanPham;
         }
 
-        // GET: Lấy danh sách san pham phân trang - /api/KhachHang/GetProductsPagination?PageNumber=1&PageSize=10
-        [HttpGet("GetProductsPagination")]
-        public async Task<IActionResult> GetProductsPagination([FromQuery] PaginationFilter filter)
+        // GET: Lấy danh sách san pham phân trang - /api/KhachHang/GetProductsPagining?PageNumber=1&PageSize=10
+        [HttpGet("GetProductsPagining")]
+        public async Task<IActionResult> GetProductsPagining([FromQuery] PaginationFilter filter)
         {
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
 
