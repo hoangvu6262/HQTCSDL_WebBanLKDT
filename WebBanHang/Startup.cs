@@ -49,7 +49,7 @@ namespace WebBanHang
                         Version = "V1"
                     });
                 // To Enable authorization using Swagger (JWT)  
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                /*options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey,
@@ -75,23 +75,29 @@ namespace WebBanHang
                         new List<string>()
 
                     }
-                });
+                });*/
+                
             });
 
             // configure the authentication schema with JWT bearer options
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(JwtOptions =>
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
+                    JwtOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = Configuration["JwtSettings:Issuer"],
-                        ValidAudience = Configuration["JwtSettings:Issuer"],
+                        ValidAudience = Configuration["JwtSettings:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:Key"]))
                     };
+                    JwtOptions.SaveToken = true;
 
                 });
 

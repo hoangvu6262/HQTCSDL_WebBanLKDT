@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 //using System.Data.SqlClient;
 using System.Linq;
+//using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,9 +36,9 @@ namespace WebBanHang.Controllers
         }
 
         // GET: lấy danh sách khach hàng - api/KhachHang/GetAllCustoms
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllCustomors")]
-        public async Task<ActionResult<IEnumerable<KhachHang>>> GetAllCustomors()
+        public async Task<ActionResult<IEnumerable<KhachHang>>> GetAllCustomors([FromHeader(Name = "Authorization")][Required] string requiredHeader)
         {
             return await _context.KhachHangs.ToListAsync();
         }
@@ -208,9 +211,9 @@ namespace WebBanHang.Controllers
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]));
 
-                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-                    var tokenString = new JwtSecurityToken(_configuration["JwtSettings:Issuer"], _configuration["JwtSettings:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: signIn);
+                    var tokenString = new JwtSecurityToken(_configuration["JwtSettings:Issuer"], _configuration["JwtSettings:Audience"], claims, expires: DateTime.UtcNow.AddDays(3), signingCredentials: signIn);
 
                     var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenString);
 
@@ -246,7 +249,7 @@ namespace WebBanHang.Controllers
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("TenDangNhap", user.TenDangNhap),
                         new Claim("MatKhau", user.MatKhau),
-                        new Claim("IsAdmin", user.IsAdmin.ToString()),
+                        new Claim("role", "Admin"),
                     };
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]));

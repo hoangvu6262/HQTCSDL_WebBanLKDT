@@ -1,22 +1,33 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router';
-import { Layout } from './components/Layout';
-import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
+import { BrowserRouter as Router, Switch } from "react-router-dom";
+import {adminRouter } from "./config/router";
+import RouterAdminTemplate from "./templates/Admin";
 
 import './custom.css'
 
 export default class App extends Component {
   static displayName = App.name;
-
-  render () {
+    render() {
+        const renderAdminRouter = () => {
+            return adminRouter.map(({ path, exact, Component }, index) => {
+                return (
+                    <RouterAdminTemplate
+                        path={path}
+                        exact={exact}
+                        Component={Component}
+                        key={index}
+                    ></RouterAdminTemplate>
+                );
+            });
+        };
     return (
-      <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
-      </Layout>
+      <>
+            <Router>
+                <Switch>
+                    {renderAdminRouter()}
+                </Switch>
+            </Router>
+      </>
     );
   }
 }
