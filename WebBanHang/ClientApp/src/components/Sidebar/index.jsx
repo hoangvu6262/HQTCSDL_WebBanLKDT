@@ -14,6 +14,7 @@ import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import KeyboardOutlinedIcon from "@mui/icons-material/KeyboardOutlined";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
+import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
 
 const drawerWidth = 280;
 
@@ -34,6 +35,12 @@ const sidebarList = [
     name: "Quản lý sản phẩm",
     icon: KeyboardOutlinedIcon,
     link: "/admin/products",
+    exact: false,
+  },
+  {
+    name: "Quản lý Hóa đơn",
+      icon: ReceiptRoundedIcon,
+    link: "/admin/bills",
     exact: false,
   },
   {

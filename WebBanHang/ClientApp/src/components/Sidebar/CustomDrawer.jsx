@@ -11,6 +11,7 @@ import { makeStyles } from "@mui/styles";
 import logo from "../../assets/img/pngkit_gamecube-logo-png_410453.png";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles({
   root: {
@@ -95,13 +96,23 @@ const useStyles = makeStyles({
 
 export default function CustomDrawer(props) {
   const { adminUser, sidebarList } = props;
-  const classes = useStyles();
+    const classes = useStyles();
+
+    const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
     setOpen(!open);
   };
+
+    const handleLogOut = () => {
+        localStorage.removeItem("adminLogin");
+        dispatch({
+            type: "ADMIN_LOGOUT",
+            payload: false,
+        });
+    };
 
   return (
     <>
@@ -162,7 +173,7 @@ export default function CustomDrawer(props) {
                     className={classes.navlinkText}
                   />
                 </ListItem>
-                <ListItem button>
+                <ListItem button onClick={handleLogOut}>
                   <ListItemIcon style={{ color: "#fff" }}>LO</ListItemIcon>
                   <ListItemText
                     primary="Log Out"

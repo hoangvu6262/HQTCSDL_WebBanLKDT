@@ -21,15 +21,15 @@ namespace WebBanHang.Controllers
             _context = context;
         }
 
-        // GET: api/TinTuc
-        [HttpGet]
+        // GET: api/TinTuc/GetNewsList
+        [HttpGet("GetNewsList")]
         public async Task<ActionResult<IEnumerable<TinTuc>>> GetTinTucs()
         {
             return await _context.TinTucs.ToListAsync();
         }
 
-        // GET: api/TinTuc/5
-        [HttpGet("{id}")]
+        // GET: api/TinTuc/GetNewsById/{id}
+        [HttpGet("GetNewsById/{id}")]
         public async Task<ActionResult<TinTuc>> GetTinTuc(int id)
         {
             var tinTuc = await _context.TinTucs.FindAsync(id);
@@ -56,7 +56,7 @@ namespace WebBanHang.Controllers
             return await news.ToListAsync();
         }
 
-        // GET: Tìm kiếm tin tức theo tiêu đề - api/tintuc/GetNewsByAuthor
+        // GET: Tìm kiếm tin tức theo nguoi viet- api/tintuc/GetNewsByAuthor
         [HttpGet("GetNewsByAuthor")]
         public async Task<IEnumerable<TinTuc>> GetNewsByAuthor(string searchString)
         {
@@ -92,7 +92,7 @@ namespace WebBanHang.Controllers
         }
 
 
-        // DELETE: xóa Tin tức - api/KhachHang/DeleteNews/id
+        // DELETE: xóa Tin tức - api/TinTuc/DeleteNews/id
         [HttpDelete("DeleteNews/{id}")]
         public async Task<ActionResult> DeleteNews(int id)
         {
@@ -103,7 +103,7 @@ namespace WebBanHang.Controllers
             return Ok("Delete News Success!");
         }
 
-        // PUT: update Tin Tức - api/HoaDon/UpdateNews/{id}
+        // PUT: update Tin Tức - api/TinTuc/UpdateNews/{id}
         [HttpPut("UpdateNews/{id}")]
         public async Task<ActionResult> UpdateNews(int id, TinTuc updateData)
         {

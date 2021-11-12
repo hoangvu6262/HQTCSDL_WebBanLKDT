@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -7,11 +7,19 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import Pagination from '../../../components/Pagiantion';
+import KeyboardIcon from '@mui/icons-material/Keyboard';
+import { GetAllProductPaging, DeleteProduct } from '../../../redux/actions/product.action';
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+
+
 
 const StyledTableCell = styled(TableCell)({
   [`&.${tableCellClasses.head}`]: {
@@ -30,14 +38,19 @@ const useStyles = makeStyles({
     margin: "auto",
   },
   iconButton: {
-    marginRight: 2,
+    marginRight: "2px !important",
     color: "#fff",
     width: 25,
     height: 25,
   },
   icon: {
-    fontSize: 15,
+    color: "#fff",
+    fontSize: "15px !important",
   },
+  pagination: {
+    padding: "15px 0",
+
+  }
 });
 
 const headerName = [
@@ -50,93 +63,131 @@ const headerName = [
   { id: 7, name: "Actions" },
 ];
 
-const rows = [
-  {
-    MaSP: 1,
-    TenSP: "Chuột",
-    HinhAnh:
-      "https://hanoicomputercdn.com/media/product/51938_tong_the_chuot_khong_day_microsoft_bluetooth_mouse_rjn_00017_mau_xanh_lam.jpg",
-    MaDanhMuc: 1,
-    DonGia: 1900000,
-    SoLuongCon: 35,
-  },
-];
 
 export default function ProductsTable(props) {
-  const classes = useStyles();
-  //   const { headerName } = props;
-  return (
-    <TableContainer className={classes.table}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            {headerName.map((header) => {
-              return (
-                <StyledTableCell key={header.id}>{header.name}</StyledTableCell>
-              );
-            })}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.TenSP}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.MaSP}
-              </TableCell>
-              <TableCell>{row.TenSP}</TableCell>
-              <TableCell>
-                <img
-                  alt={row.TenSP}
-                  src={row.HinhAnh}
-                  width="80px"
-                  //   height="1px"
-                />
-              </TableCell>
-              <TableCell>{row.MaDanhMuc}</TableCell>
-              <TableCell>{row.DonGia}</TableCell>
-              <TableCell>{row.SoLuongCon}</TableCell>
-              <TableCell>
-                <Tooltip title="Delete Product" arrow>
-                  <IconButton
-                    // onClick={handleOpenAddOrEditDialog}
-                    className={classes.iconButton}
-                    style={{
-                      backgroundColor: "rgb(235, 0, 20)",
-                    }}
-                  >
-                    <DeleteForeverOutlinedIcon className={classes.icon} />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Edit Product" arrow>
-                  <IconButton
-                    // onClick={handleOpenAddOrEditDialog}
-                    className={classes.iconButton}
-                    style={{
-                      backgroundColor: "rgb(206, 147, 216)",
-                    }}
-                  >
-                    <ModeEditOutlinedIcon className={classes.icon} />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Product Detail" arrow>
-                  <IconButton
-                    // onClick={handleOpenAddOrEditDialog}
-                    className={classes.iconButton}
-                    style={{
-                      backgroundColor: "rgb(144, 202, 249)",
-                    }}
-                  >
-                    <InfoOutlinedIcon className={classes.icon} />
-                  </IconButton>
-                </Tooltip>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    const classes = useStyles();
+    //const { rows } = props;
+
+    const { listProductsPaging, totalPage, PageNumber } = useSelector((state) => state.product);
+
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    useEffect(() => {
+        dispatch(GetAllProductPaging(1, 5));
+    }, [])
+
+
+    const handleChangePage = (e, value) => {
+        dispatch(GetAllProductPaging(value, 5));
+    }
+
+    const handleOnclickDetail = (id) => {
+        
+        history.push(`/admin/products/productdetail/${id}`);
+    }
+
+    const handleOnclickEdit = (id) => {
+        history.push(`/admin/products/editproduct/${id}`);
+    }
+
+    const handleOnclickDelete = (id) => {
+        dispatch(DeleteProduct(id));
+    }
+
+    const renderCategory = (categoryId) => {
+        switch (categoryId) {
+            case 1:
+                return (<Chip color="primary" variant="outlined" label="Màn hình" />);
+            case 2:
+                return (<Chip color="primary" variant="outlined" label="Bàn phím" />);
+            case 3:
+                return (<Chip color="primary" variant="outlined" label="Tai nghe" />);
+            case 4:
+                return (<Chip color="primary" variant="outlined" label="Chuột" />);
+            default:
+                return (<Chip color="primary" variant="outlined" label="Màn hình" />);
+        }
+    }
+
+    return (
+    <>
+            <TableContainer className={classes.table}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            {headerName.map((header) => {
+                                return (
+                                    <StyledTableCell key={header.id}>{header.name}</StyledTableCell>
+                                );
+                            })}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {listProductsPaging.map((row) => (
+                            <TableRow
+                                key={row.tenSp}
+                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                            >
+                                <TableCell component="th" scope="row">
+                                    {row.maSp}
+                                </TableCell>
+                                <TableCell>{row.tenSp}</TableCell>
+                                <TableCell>
+                                    <img
+                                        alt={row.tenSp}
+                                        src={row.hinhAnh}
+                                        width="80px"
+                                    //   height="1px"
+                                    />
+                                </TableCell>
+                                <TableCell>{renderCategory(row.maDanhMuc)}</TableCell>
+                                <TableCell>{row.donGia}</TableCell>
+                                <TableCell>{row.soLuongCon}</TableCell>
+                                <TableCell>
+                                    <Tooltip title="Delete Product" arrow>
+                                        <IconButton
+                                            onClick={() => handleOnclickDelete(row.maSp)}
+                                            className={classes.iconButton}
+                                            style={{
+                                                backgroundColor: "rgb(235, 0, 20)",
+                                            }}
+                                        >
+                                            <DeleteForeverOutlinedIcon className={classes.icon} />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Edit Product" arrow>
+                                        <IconButton
+                                            onClick={() => handleOnclickEdit(row.maSp)}
+                                            className={classes.iconButton}
+                                            style={{
+                                                backgroundColor: "rgb(206, 147, 216)",
+                                            }}
+                                        >
+                                            <ModeEditOutlinedIcon className={classes.icon} />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Product Detail" arrow>
+                                        <IconButton
+                                            onClick={() => handleOnclickDetail(row.maSp)}
+                                            className={classes.iconButton}
+                                            style={{
+                                                backgroundColor: "rgb(144, 202, 249)",
+                                            }}
+                                        >
+                                            <InfoOutlinedIcon className={classes.icon} />
+                                        </IconButton>
+                                    </Tooltip>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <div className={classes.pagination}>
+                {totalPage > 1 ? (<Pagination totalPage={totalPage} page={PageNumber} onChange={handleChangePage} />) : null}
+                {/*<Pagination totalPage={totalPage} page={PageNumber} onChange={handleChangePage} />*/}
+            </div>
+    </>
   );
 }

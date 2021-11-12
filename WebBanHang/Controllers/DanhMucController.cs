@@ -21,7 +21,7 @@ namespace WebBanHang.Controllers
             _context = context;
         }
 
-        // GET: api/DanhMuc
+        // GET: api/DanhMuc/GetAllCategories
         [HttpGet("GetAllCategories")]
         public async Task<ActionResult<IEnumerable<DanhMuc>>> GetAllCategories()
         {

@@ -48,7 +48,7 @@ export default function AdminHeader(props) {
 
   return (
     <>
-      <Paper className={classes.root}>
+      <div className={classes.root}>
         <Grid container className={classes.adminHeaderContainer}>
           <Grid item xs={11}>
             <div className={classes.AdminHeaderTitleContainer}>
@@ -71,7 +71,7 @@ export default function AdminHeader(props) {
             </Tooltip>
           </Grid>
         </Grid>
-      </Paper>
+      </div>
       <Divider />
     </>
   );

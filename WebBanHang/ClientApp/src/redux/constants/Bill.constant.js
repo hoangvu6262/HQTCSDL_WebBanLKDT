@@ -1,0 +1,39 @@
+﻿//get bills list paging
+export const GET_BILLS_PAGING_SUCCESS = "GET_BILLS_PAGING_SUCCESS";
+export const GET_BILLS_PAGING_FAIL = "GET_BILLS_PAGING_FAIL";
+
+// get bill detail
+export const GET_BILL_DETAIL_SUCCESS = "GET_BILL_DETAIL_SUCCESS";
+export const GET_BILL_DETAIL_FAIL = "GET_BILL_DETAIL_FAIL";
+
+// add bill
+export const ADD_BILL_SUCCESS = "ADD_BILL_SUCCESS";
+export const ADD_BILL_FAIL = "ADD_BILL_FAIL";
+
+//add bill detail
+export const ADD_BILL_DETAIL_SUCCESS = "ADD_BILL_DETAIL_SUCCESS";
+export const ADD_BILL_DETAIL_FAIL = "ADD_BILL_DETAIL_FAIL";
+
+// UPDATE BILL
+export const UPDATE_BILL_SUCCESS = "UPDATE_BILL_SUCCESS";
+export const UPDATE_BILL_FAIL = "UPDATE_BILL_FAIL";
+
+// delete bill
+export const DELETE_BILL_SUCCESS = "DELETE_BILL_SUCCESS";
+export const DELETE_BILL_FAIL = "DELETE_BILL_FAIL";
+
+// put confirm received 
+export const PUT_CONFIRM_RECEIVED_SUCCESS = "PUT_CONFIRM_RECEIVED_SUCCESS";
+export const PUT_CONFIRM_RECEIVED_FAIL = "PUT_CONFIRM_RECEIVED_FAIL";
+
+// put confirm canceled 
+export const PUT_CONFIRM_CANCELED_SUCCESS = "PUT_CONFIRM_CANCELED_SUCCESS";
+export const PUT_CONFIRM_CANCELED_FAIL = "PUT_CONFIRM_CANCELED_FAIL";
+
+// put ad confirm
+export const PUT_AD_CONFIRM_SUCCESS = "PUT_AD_CONFIRM_SUCCESS";
+export const PUT_AD_CONFIRM_FAIL = "PUT_AD_CONFIRM_FAIL";
+
+// get list bills by status
+export const GET_BILLS_BY_STATUS_SUCCESS = "GET_BILLS_BY_STATUS_SUCCESS";
+export const GET_BILLS_BY_STATUS_FAIL = "GET_BILLS_BY_STATUS_FAIL";

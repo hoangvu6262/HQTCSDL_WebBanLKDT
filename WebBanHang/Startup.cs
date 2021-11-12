@@ -38,6 +38,8 @@ namespace WebBanHang
             // add service DbContext
             services.AddDbContext<Models.WebBanHangContext>(options => options.UseSqlServer(Configuration.GetConnectionString("WebBanHangDb")));
 
+            services.AddCors();
+
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(options =>
             {
@@ -111,6 +113,11 @@ namespace WebBanHang
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(options =>
+            options.WithOrigins("http://localhost:31051")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -118,7 +125,9 @@ namespace WebBanHang
             else
             {
                 app.UseExceptionHandler("/Error");
-            }            
+            }
+
+            
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

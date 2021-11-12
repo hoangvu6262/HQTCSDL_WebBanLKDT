@@ -111,7 +111,7 @@ namespace WebBanHang.Controllers
             return products;
         }
 
-        // POST: thêm sản phẩm - api/KhachHang/AddProduct
+        // POST: thêm sản phẩm - api/SanPham/AddProduct
         [HttpPost("AddProduct")]
         public async Task<ActionResult<SanPham>> AddProduct(SanPham insert)
         {
@@ -142,7 +142,7 @@ namespace WebBanHang.Controllers
 
         }
 
-        // DELETE: xóa sản phẩm - api/KhachHang/DeleteProduct/id
+        // DELETE: xóa sản phẩm - api/sanpham/DeleteProduct/id
         [HttpDelete("DeleteProduct/{id}")]
         public async Task<ActionResult> DeleteCustomor(int id)
         {

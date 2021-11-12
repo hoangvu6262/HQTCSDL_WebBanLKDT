@@ -36,14 +36,14 @@ namespace WebBanHang.Controllers
         }
 
         // GET: lấy danh sách khach hàng - api/KhachHang/GetAllCustoms
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet("GetAllCustomors")]
-        public async Task<ActionResult<IEnumerable<KhachHang>>> GetAllCustomors([FromHeader(Name = "Authorization")][Required] string requiredHeader)
+        public async Task<ActionResult<IEnumerable<KhachHang>>> GetAllCustomors()
         {
             return await _context.KhachHangs.ToListAsync();
         }
 
-        // GET: Lấy thông tin chi tiết khách hàng theo id -  api/KhachHang/GetCustomDetail/5
+        // GET: Lấy thông tin chi tiết khách hàng theo id -  api/KhachHang/GetCustomorDetail/5
         [HttpGet("GetCustomorDetail/{id}")]
         public async Task<ActionResult<KhachHang>> GetCustomorDetail(int id)
         {
@@ -116,9 +116,8 @@ namespace WebBanHang.Controllers
         }
 
 
-        // POST: thêm khách hàng - api/KhachHang/AddCustom   
+        // POST: thêm khách hàng - api/KhachHang/AddCustomor   
         [HttpPost("AddCustomor")]
-        [Authorize]
         public async Task<ActionResult<KhachHang>> AddCustomor(KhachHang insert)
         {
             var TenParam = new SqlParameter("@Ten", insert.Ten);

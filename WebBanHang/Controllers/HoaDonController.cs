@@ -43,7 +43,7 @@ namespace WebBanHang.Controllers
             return hoaDon;
         }
 
-        // GET: Lấy thông tin chi tiết hóa đơn theo id -  api/KhachHang/GetBillDetail/5
+        // GET: Lấy thông tin chi tiết hóa đơn theo id -  api/HoaDon/GetBillDetail/5
         [HttpGet("GetBillDetail/{id}")]
         public async Task<ActionResult<HoaDon>> GetBillDetail(int id)
         {
@@ -62,7 +62,7 @@ namespace WebBanHang.Controllers
         }
 
 
-        //GET: Lấy danh sách khách hàng phân trang - api/KhachHang/GetBillPaging?PageNumber=1&PageSize=10
+        //GET: Lấy danh sách khách hàng phân trang - api/HoaDon/GetBillPaging?PageNumber=1&PageSize=10
         [HttpGet("GetBillPaging")]
         public async Task<IActionResult> GetBillPaging([FromQuery] PaginationFilter filter)
         {
@@ -87,7 +87,7 @@ namespace WebBanHang.Controllers
         }
 
 
-        // POST: thêm Hóa đơn - api/KhachHang/AddBill
+        // POST: thêm Hóa đơn - api/HoaDon/AddBill
         [HttpPost("AddBill")]
         public async Task<ActionResult<HoaDon>> AddBill(HoaDon insert)
         {
@@ -101,7 +101,7 @@ namespace WebBanHang.Controllers
 
         }
 
-        // DELETE: xóa Hóa Đơn - api/KhachHang/DeleteBill/id
+        // DELETE: xóa Hóa Đơn - api/HoaDon/DeleteBill/id
         [HttpDelete("DeleteBill/{id}")]
         public async Task<ActionResult> DeleteBill(int id)
         {
@@ -176,7 +176,7 @@ namespace WebBanHang.Controllers
             
         }
 
-        // GET: Lấy danh sách hóa đơn chờ duyệt - api/HoaDon/GetBillByStatus
+        // GET: Lấy danh sách hóa đơn theo status - api/HoaDon/GetBillByStatus
         [HttpGet("GetBillByStatus")]
         public async Task<ActionResult<IEnumerable<HoaDon>>> GetBillByStatus(int status)
         {
