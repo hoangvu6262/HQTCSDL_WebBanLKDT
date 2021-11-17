@@ -7,6 +7,7 @@ import UserDetail from "../pages/Admin/UserDetail";
 import EditProduct from "../pages/Admin/ProductEdit";
 import Bill from "../pages/Admin/Bill";
 import News from "../pages/Admin/News"
+import Home from "../pages/Main/Home"
 
 export const adminRouter = [
   {
@@ -59,4 +60,13 @@ export const loginRouter = [
         Component: LoginPage,
     },
 ]
+
+export const mainRouter = [
+    {
+        path: "/",
+        exact: true,
+        Component: Home,
+    },
+]
+
     

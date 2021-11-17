@@ -28,11 +28,13 @@ namespace WebBanHang.Controllers
             return await _context.ChiTietHoaDons.ToListAsync();
         }
 
-        // GET: api/ChiTietHoaDon/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ChiTietHoaDon>> GetChiTietHoaDon(int id)
+        // GET: api/ChiTietHoaDon/GetBillDetailByBillId
+        [HttpGet("GetBillDetailByBillId")]
+        public async Task<ActionResult<IEnumerable<ChiTietHoaDon>>> GetChiTietHoaDon(int MaHoaDon)
         {
-            var chiTietHoaDon = await _context.ChiTietHoaDons.FindAsync(id);
+            var MaHoaDonParam = new SqlParameter("@MaHoaDon", MaHoaDon);
+
+            var chiTietHoaDon = await _context.ChiTietHoaDons.FromSqlRaw("SELECT * FROM[dbo].[F_SelectCTHD](@MaHoaDon)", MaHoaDonParam).ToListAsync();
 
             if (chiTietHoaDon == null)
             {

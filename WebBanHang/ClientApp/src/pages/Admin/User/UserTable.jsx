@@ -142,7 +142,7 @@ export default function UsersTable(props) {
                                     />
                                 </TableCell>
                                 <TableCell>
-                                    <Tooltip title="Delete Product" arrow>
+                                    <Tooltip title="Delete User" arrow>
                                         <IconButton
                                             onClick={() => handleOnclickDelete(row.maSp)}
                                             className={classes.iconButton}
@@ -153,7 +153,7 @@ export default function UsersTable(props) {
                                             <DeleteForeverOutlinedIcon className={classes.icon} />
                                         </IconButton>
                                     </Tooltip>
-                                    <Tooltip title="Edit Product" arrow>
+                                    <Tooltip title="Edit User" arrow>
                                         <IconButton
                                             onClick={() => handleOnclickEdit(row)}
                                             className={classes.iconButton}
@@ -164,7 +164,7 @@ export default function UsersTable(props) {
                                             <ModeEditOutlinedIcon className={classes.icon} />
                                         </IconButton>
                                     </Tooltip>
-                                    <Tooltip title="Product Detail" arrow>
+                                    <Tooltip title="User Detail" arrow>
                                         <IconButton
                                             onClick={() => handleOnclickDetail(row.maKhachHang)}
                                             className={classes.iconButton}

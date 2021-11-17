@@ -42,6 +42,22 @@ namespace WebBanHang.Controllers
             return binhLuan;
         }
 
+        // GET: api/BinhLuan/GetCommentsByProductId
+        [HttpGet("GetCommentsByProductId")]
+        public async Task<ActionResult<IEnumerable<BinhLuan>>> GetCommentsByProductId(int productId)
+        {
+            var MaSPParam = new SqlParameter("@MaSP", productId);
+
+            var binhLuan = await _context.BinhLuans.FromSqlRaw("SELECT * FROM [dbo].[F_SelectBL] (@MaSP)", MaSPParam).ToListAsync();
+
+            if (binhLuan == null)
+            {
+                return NotFound();
+            }
+
+            return binhLuan;
+        }
+
         // POST: thêm bình luận - api/KhachHang/AddComment
         [HttpPost("AddComment")]
         public async Task<ActionResult<BinhLuan>> AddComment(BinhLuan insert)

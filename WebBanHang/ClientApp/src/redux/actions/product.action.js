@@ -23,7 +23,7 @@ export const GetAllProductPaging = (pageNumber, PageSize) => {
     return (dispatch) => {
         axios.get(`http://localhost:31051/api/SanPham/GetProductsPagining?PageNumber=${pageNumber}&PageSize=${PageSize}`)
             .then((res) => {
-                console.log(res.data);
+                //console.log(res.data);
                 dispatch(action(GET_ALL_PRODUCT_PAGING_SUCCESS, res.data));
             })
             .catch((err) => {

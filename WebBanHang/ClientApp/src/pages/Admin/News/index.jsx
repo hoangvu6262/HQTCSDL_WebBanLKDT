@@ -103,7 +103,7 @@ export default function News() {
         <>
             <Grid container>
                 <Grid item xs={12} className={classes.root}>
-                    <AdminHeader title="Quản lý sản phẩm" handleOnlick={handleOnlick} />
+                    <AdminHeader title="Quản lý Tin Tức" handleOnlick={handleOnlick} />
                     <Paper className={classes.searchPaper}>
                         <Search
                             id="search"

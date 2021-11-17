@@ -25,7 +25,7 @@ namespace WebBanHang.Controllers
         [HttpGet("GetAllCategories")]
         public async Task<ActionResult<IEnumerable<DanhMuc>>> GetAllCategories()
         {
-            return await _context.DanhMucs.ToListAsync();
+            return await _context.DanhMucs.FromSqlRaw("SELECT * FROM [dbo].[F_SelectDM]()").ToListAsync();
         }
 
         // GET: api/DanhMuc/5

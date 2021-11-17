@@ -25,7 +25,7 @@ namespace WebBanHang.Controllers
         [HttpGet("GetNewsList")]
         public async Task<ActionResult<IEnumerable<TinTuc>>> GetTinTucs()
         {
-            return await _context.TinTucs.ToListAsync();
+            return await _context.TinTucs.FromSqlRaw("SELECT * FROM [dbo].[F_SelectTT]()").ToListAsync();
         }
 
         // GET: api/TinTuc/GetNewsById/{id}

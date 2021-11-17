@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch } from "react-router-dom";
-import { adminRouter, loginRouter } from "./config/router";
+import { adminRouter, loginRouter, mainRouter } from "./config/router";
 import RouterAdminTemplate from "./templates/Admin";
-import RouterLoginTemplate from "./templates/Login"
+import RouterLoginTemplate from "./templates/Login";
+import RouterMainTemplate from "./templates/Main"
 import './custom.css'
 
 export default class App extends Component {
@@ -37,12 +38,27 @@ export default class App extends Component {
             });
         };
 
+        // render main route
+        const renderMainRouter = () => {
+            return mainRouter.map(({ path, exact, Component }, index) => {
+                return (
+                    <RouterMainTemplate
+                        path={path}
+                        exact={exact}
+                        Component={Component}
+                        key={index}
+                    ></RouterMainTemplate>
+                );
+            });
+        };
+
     return (
       <>
             <Router>
                 <Switch>
                     {renderAdminRouter()}
                     {renderLoginRouter()}
+                    {renderMainRouter()}
                 </Switch>
             </Router>
       </>

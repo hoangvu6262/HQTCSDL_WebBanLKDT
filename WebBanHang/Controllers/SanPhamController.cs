@@ -106,9 +106,35 @@ namespace WebBanHang.Controllers
         [HttpGet("GetProductsByCatagory")]
         public async Task<IEnumerable<SanPham>> GetProductsByCategory(int categoryID)
         {
+            
             var products = await _context.SanPhams.Where(product => product.MaDanhMuc == categoryID).ToListAsync();
 
             return products;
+        }
+
+        // GET: Lấy danh Sản Phẩm theo Danh Mục Sản Phẩm - api/SanPham/GetProductsByCategoryPaging?category=
+        [HttpGet("GetProductsByCategoryPaging")]
+        public async Task<ActionResult> GetProductsByCategoryPaging(int categoryID, [FromQuery] PaginationFilter filter)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+
+            // lấy data từ bảng SanPham
+            var pagedData = await _context.SanPhams
+               .Where(product => product.MaDanhMuc == categoryID)
+               .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+               .Take(validFilter.PageSize)
+               .ToListAsync();
+
+            // tổng số phần tử
+            var totalRecords = await _context.SanPhams.Where(product => product.MaDanhMuc == categoryID).CountAsync();
+
+            // tổng số trang
+            var totalPages = ((double)totalRecords / (double)validFilter.PageSize);
+            int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+
+            var pageRespone = new PagedResponse<List<SanPham>>(pagedData, validFilter.PageNumber, validFilter.PageSize, totalRecords, roundedTotalPages);
+
+            return Ok(pageRespone);
         }
 
         // POST: thêm sản phẩm - api/SanPham/AddProduct

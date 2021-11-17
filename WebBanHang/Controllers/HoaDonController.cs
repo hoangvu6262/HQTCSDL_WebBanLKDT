@@ -26,7 +26,7 @@ namespace WebBanHang.Controllers
         [HttpGet("GetAllBills")]
         public async Task<ActionResult<IEnumerable<HoaDon>>> GetAllBills()
         {
-            return await _context.HoaDons.ToListAsync();
+            return await _context.HoaDons.FromSqlRaw("SELECT * FROM[dbo].[F_SelectHD]()").ToListAsync();
         }
 
         // GET: api/HoaDon/5
@@ -45,13 +45,17 @@ namespace WebBanHang.Controllers
 
         // GET: Lấy thông tin chi tiết hóa đơn theo id -  api/HoaDon/GetBillDetail/5
         [HttpGet("GetBillDetail/{id}")]
-        public async Task<ActionResult<HoaDon>> GetBillDetail(int id)
+        public async Task<ActionResult<IEnumerable<HoaDon>>> GetBillDetail(int id)
         {
             //Eager Loading
-            var hoaDon = await _context.HoaDons
-                                          .Include(HD => HD.ChiTietHoaDons)
-                                          .Where(HD => HD.MaHoaDon == id)
-                                          .FirstOrDefaultAsync();
+            //var hoaDon = await _context.HoaDons
+            //                              .Include(HD => HD.ChiTietHoaDons)
+            //                              .Where(HD => HD.MaHoaDon == id)
+            //                              .FirstOrDefaultAsync();
+            var MaKhachHangParam = new SqlParameter("@MaKhachHang", id);
+
+            var hoaDon = await _context.HoaDons.FromSqlRaw("SELECT * FROM[dbo].[F_GetBill](@MaKhachHang)",
+                    MaKhachHangParam).ToListAsync();
 
             if (hoaDon == null)
             {

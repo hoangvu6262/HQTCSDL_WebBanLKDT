@@ -62,18 +62,23 @@ namespace WebBanHang.Controllers
             return khachHang;
         }
 
-        // GET: Lấy thông tin khách hàng theo id - api/KhachHang/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<KhachHang>> GetCustomor(int id)
+        // GET: Lấy thông tin khách hàng theo tenDangNhap - api/KhachHang/5
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<KhachHang>>> GetCustomor(string tenDangNhap)
         {
-            var khachHang = await _context.KhachHangs.FindAsync(id);
+            var TenDangNhapParam = new SqlParameter("@TenDangNhap", tenDangNhap);
 
-            if (khachHang == null)
+            var account = await _context.KhachHangs.FromSqlRaw("SELECT * FROM[dbo].[F_GetAccount](@TenDangNhap)",
+                TenDangNhapParam).ToListAsync();
+            
+            if (account == null)
             {
-                return NotFound("Custom Not Found!");
+                return NotFound("not found!");
             }
 
-            return khachHang;
+            return account;
+
+
         }
 
         //GET: Lấy danh sách khách hàng phân trang - api/KhachHang/GetCustomorsPagining?PageNumber=1&PageSize=10
