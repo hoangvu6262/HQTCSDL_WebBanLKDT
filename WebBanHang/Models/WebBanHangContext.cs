@@ -25,6 +25,8 @@ namespace WebBanHang.Models
         public virtual DbSet<SanPham> SanPhams { get; set; }
         public virtual DbSet<TinTuc> TinTucs { get; set; }
 
+        public virtual DbSet<F_GetProducts> F_GetProducts { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

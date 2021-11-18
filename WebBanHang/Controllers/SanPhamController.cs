@@ -24,9 +24,9 @@ namespace WebBanHang.Controllers
 
         // GET: api/SanPham
         [HttpGet("GetAllProducts")]
-        public async Task<ActionResult<IEnumerable<SanPham>>> GetSanPhams()
+        public async Task<ActionResult<IEnumerable<F_GetProducts>>> GetSanPhams()
         {
-            return await _context.SanPhams.ToListAsync();
+            return await _context.F_GetProducts.FromSqlRaw("SELECT * FROM [dbo].[F_SelectSP]()").ToListAsync();
         }
 
         // GET: api/SanPham/5
@@ -210,6 +210,24 @@ namespace WebBanHang.Controllers
             return Ok("Update success!");
 
 
+        }
+
+        // GET: api/SanPham/GetRelatedProducts
+        [HttpGet("GetRelatedProducts")]
+        public async Task<ActionResult<IEnumerable<F_GetProducts>>> GetRelatedProducts(int MaSP, string TenDanhMuc)
+        {
+            var MaSPParam = new SqlParameter("@MaSP", MaSP);
+            var TenDanhMucParam = new SqlParameter("@TenDanhMuc", TenDanhMuc);
+
+            var relatedProducts = await _context.F_GetProducts.FromSqlRaw("SELECT * FROM [dbo].[F_SPwithsameDM](@MaSP, @TenDanhMuc)"
+                , MaSPParam, TenDanhMucParam).ToListAsync();
+
+            if (relatedProducts == null)
+            {
+                return NotFound("Not Found Related Products!");
+            }
+
+            return relatedProducts;
         }
 
     }
