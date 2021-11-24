@@ -85,6 +85,7 @@ export const AdminLogin = (data) => {
             .then((res) => {
                 //console.log(res.data);
                 localStorage.setItem("adminLogin", JSON.stringify(res.data))
+                localStorage.setItem("isAdminLogin", true)
                 dispatch(action(ADMIN_LOGIN_SUCCESS, res.data))
             })
             .catch((err) => {

@@ -251,7 +251,7 @@ const UserDetail = () => {
                     <AppBar position="static" className={classes.appbar}>
                         Comments
                     </AppBar>
-                    {userDetail.binhLuans != null ? renderListComments(userDetail.binhLuans) : (<p>Hiện khách hàng chưa bình luận về sản phẩm nào.</p>)}
+                    {userDetail.binhLuans.length > 0 ? renderListComments(userDetail.binhLuans) : (<p>Hiện khách hàng chưa bình luận về sản phẩm nào.</p>)}
                 </Box>
 
             </Container>

@@ -73,7 +73,7 @@ export default function RegisterPage(props) {
             <Container maxWidth="md" className={classes.loginPageContent}>
                 <div className={classes.formLogin}>
                     <div className={classes.logo}>
-                        <p>LOGIN</p>
+                        <p>Register</p>
                     </div>
                     <RegisterForm  />
                 </div>

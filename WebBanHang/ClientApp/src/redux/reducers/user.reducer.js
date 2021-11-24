@@ -26,9 +26,10 @@ const intialState = {
     totalPage: 0,
     PageNumber: 0,
     notification: {},
-    isAdminLogin: false,
+    isAdminLogin: JSON.parse(localStorage.getItem("isAdminLogin")) ?? false,
     isCustomorLogin: JSON.parse(localStorage.getItem("isCustomorLogin")) ?? false,
     customor: JSON.parse(localStorage.getItem("customorLogin")) ?? {},
+    adminLoginUser: JSON.parse(localStorage.getItem("adminLogin")) ?? {}
 }
 
 const UserReducer = (state = intialState, action) => {
@@ -67,7 +68,10 @@ const UserReducer = (state = intialState, action) => {
         case "ADMIN_LOGIN_AUTO":
             return { ...state, isAdminLogin: payload };
         case "ADMIN_LOGOUT":
-            return { ...state, isAdminLogin: payload };
+            localStorage.removeItem("isAdminLogin");
+            localStorage.removeItem("adminLogin");
+            return {
+                ...state, isAdminLogin: payload, adminLoginUser: {}};
         case "CUSTOMOR_LOGOUT":
             localStorage.removeItem("isCustomorLogin");
             localStorage.removeItem("customorLogin");

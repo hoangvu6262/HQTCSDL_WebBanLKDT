@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function LoginPage(props) {
+export default function CustomLoginPage(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
 
