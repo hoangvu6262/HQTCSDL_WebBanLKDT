@@ -180,7 +180,7 @@ export const AddBill = (addData, openDialog, setOpenDialog) => {
 export const CheckOut = (addData) => {
     return (dispatch) => {
         console.log(addData)
-        axios.post(`http://localhost:31051/api/HoaDon/CheckOutOrder`, addData)
+        axios.post(`http://localhost:31051/api/HoaDon/AddBill`, addData)
             .then((res) => {
                 const notification = {
                     open: true,
@@ -196,6 +196,20 @@ export const CheckOut = (addData) => {
                     message: "Checkout Error!",
                 };
                 dispatch(action(ADD_BILL_FAIL, notification));
+            })
+    }
+}
+
+//add bill detail 
+export const AddBillDetail = (addData) => {
+    return (dispatch) => {
+        console.log(addData)
+        axios.post(`http://localhost:31051/api/HoaDon/api/ChiTietHoaDon/AddBillDetail`, addData)
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
             })
     }
 }

@@ -2,7 +2,7 @@
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { GetProductDetailById, GetRelatedProducts } from "../../../redux/actions/product.action";
-import { Grid, Paper, Divider, Container, Box, Chip, Rating, Alert, Button, AppBar, IconButton  } from '@mui/material';
+import { Grid, Paper, Divider, Container, Box, Chip, Rating, Alert, Button, AppBar, IconButton, Typography  } from '@mui/material';
 import { makeStyles } from "@mui/styles";
 import CustomCarousel from "../../../components/Carousel/CustomCarousel";
 import { styled } from '@mui/material/styles';
@@ -10,7 +10,11 @@ import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { ADD_TO_CART_SUCCESS } from "../../../redux/constants/product.constant";
 import action from "../../../redux/actions/action";
-import ShopProductCard from "../../../components/Card/ShopProductCard"
+import ShopProductCard from "../../../components/Card/ShopProductCard";
+import Comment from "../../../components/Comment";
+import { AddComment, DeleteComment } from "../../../redux/actions/comment.action";
+import Notification from "../../../components/Notification";
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
 
 const StyledRating = styled(Rating)({
@@ -21,6 +25,25 @@ const StyledRating = styled(Rating)({
         color: '#ff3d47',
     },
 });
+
+const CommentContainer = styled('div')({
+    padding: 15,
+    "& p": {
+        padding: 0,
+    }
+})
+
+const CommentTitle = styled('div')({
+    display: "flex",
+    justifyContent: "space-between",
+    "& h6": {
+        fontFamily: "'Urbanist', sans- serif !important",
+        fontWeight: 600
+    }
+    
+})
+
+
 
 const useStyle = makeStyles({
     root: {
@@ -109,12 +132,9 @@ const useStyle = makeStyles({
     productDetailDiscription: {
         marginTop: 15,
         borderRadius: "0px !important",
-        //border: "1px solid #ddcece !important",
-        //boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
         "& p": {
             padding: "20px",
             marginBottom: 0,
-            // paddingLeft: 15,
             fontSize: 15,
             fontWeight: 400,
             color: "rgb(33, 43, 54)",
@@ -145,13 +165,18 @@ const MainProductDetail = () => {
     const [cartQuantity, setCartQuantity] = useState(1);
 
     const { productDetail, listRelatedProducts } = useSelector((state) => state.product);
+    const { notification } = useSelector(state => state.comment);
+    const { customor } = useSelector(state => state.user)
 
     useEffect(() => {
         dispatch(GetProductDetailById(id))
         dispatch(GetRelatedProducts(id, "tai nghe"))
     }, []);
 
-    console.log(listRelatedProducts)
+    useEffect(() => {
+        dispatch(GetProductDetailById(id))
+        dispatch(GetRelatedProducts(id, "tai nghe"))
+    }, [id]);
 
     const productIamge = [
         {
@@ -208,16 +233,21 @@ const MainProductDetail = () => {
     const renderListComments = (comments) => {
         return comments.map((comment) => {
             return (
-                <div className={classes.price} key={comment.maBl}>
-                    <div>
-                        <p>Mã Khách Hàng: {comment.maKhachHang} - {comment.thoiGian} </p>
+                <>
+                    <CommentContainer key={comment.maBl}>
+                        <CommentTitle>
+                            <Typography variant="subtitle1" component="h6">
+                                Mã Khách Hàng: {comment.maKhachHang} - {comment.thoiGian}
+                            </Typography>
+                            <IconButton>
+                                <DeleteForeverOutlinedIcon />
+                            </IconButton>
+                        </CommentTitle>
                         <p> {comment.noiDungBinhLuan} </p>
-                    </div>
-
-                    <p>
-                        <Button variant="outlined" color="error" fullWidth>X</Button>
-                    </p>
-                </div>
+                    </CommentContainer>
+                    <Divider />
+                </>
+                
             );
         })
 
@@ -244,6 +274,23 @@ const MainProductDetail = () => {
 
     const handleAddToCartRelated = (product) => {
         dispatch(action(ADD_TO_CART_SUCCESS, product));
+    }
+
+    const handleCloseNotification = () => {
+        dispatch({
+            type: "CLOSE_NOTIFICATION",
+            payload: false,
+        });
+    };
+
+    const handleAddComment = (noiDungBinhLuan, setAddComment) => {
+        
+        const comment = {
+            maSp: id,
+            maKhachHang: customor.id,
+            noiDungBinhLuan: noiDungBinhLuan
+        }
+        dispatch(AddComment(comment, id, GetProductDetailById, setAddComment))
     }
 
     return (
@@ -337,11 +384,12 @@ const MainProductDetail = () => {
                     <AppBar position="static" className={classes.appbar}>
                         Comments
                     </AppBar>
+                    <Comment onClickAddComment={handleAddComment}/>
                     {productDetail.binhLuans.length > 0 ? renderListComments(productDetail.binhLuans) : (<p>No Comment.</p>)}
                 </Box>
 
             </Container>
-
+            <Notification notifyAlert={notification} onClose={handleCloseNotification} />
         </>
     );
 }

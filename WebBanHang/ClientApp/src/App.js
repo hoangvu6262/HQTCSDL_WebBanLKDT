@@ -6,7 +6,8 @@ import RouterLoginTemplate from "./templates/Login";
 import RouterMainTemplate from "./templates/Main"
 import './custom.css';
 import { useSelector } from "react-redux";
-import CustomLoginPage from "./pages/Main/Login"
+import CustomLoginPage from "./pages/Main/Login";
+import RegisterPage from "./pages/Main/Register"
 
 export default function App() {
     // render admin route
@@ -64,6 +65,9 @@ export default function App() {
                     {renderMainRouter()}
                     <Route path="/login" exact={false}>
                         {isCustomorLogin ? <Redirect to="/" /> : <CustomLoginPage />}
+                    </Route>
+                    <Route path="/register" exact={false}>
+                        {isCustomorLogin ? <Redirect to="/" /> : <RegisterPage />}
                     </Route>
                 </Switch>
             </Router>

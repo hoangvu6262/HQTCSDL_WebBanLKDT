@@ -11,6 +11,7 @@ import Home from "../pages/Main/Home";
 import Cart from "../pages/Main/Cart";
 import ListProducts from "../pages/Main/ListProducts";
 import MainProductDetail from "../pages/Main/ProductDetail";
+import Profile from "../pages/Main/Profile"
 
 
 export const adminRouter = [
@@ -90,6 +91,11 @@ export const mainRouter = [
         path: "/product-detail&product-id=:id",
         exact: false,
         Component: MainProductDetail
+    },
+    {
+        path: "/profile&userid=:id",
+        exact: false,
+        Component: Profile
     }
     
 ]

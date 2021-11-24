@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect} from "react";
 import HomeCarousel from "../../../components/Carousel/HomeCarousel";
 import { GetAllProductPaging } from "../../../redux/actions/product.action";
+import { GetNewsList } from "../../../redux/actions/news.action"
 import { useDispatch, useSelector } from "react-redux";
 import ShopProductCard from "../../../components/Card/ShopProductCard";
 import { Grid, Typography, Container, Paper, Button } from "@mui/material"
@@ -8,7 +9,8 @@ import { makeStyles } from "@mui/styles";
 import { ADD_TO_CART_SUCCESS } from "../../../redux/constants/product.constant";
 import action from "../../../redux/actions/action";
 import { GetListCategory } from "../../../redux/actions/category.action";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
+import NewsCard from "../../../components/Card/NewsCard"
 
 const useStyles = makeStyles({
     newProduct: {
@@ -74,12 +76,14 @@ const Home = () => {
 
     const { listProductsPaging, cart } = useSelector((state) => state.product);
     const { listCategory } = useSelector(state => state.category);
+    const { listNews } = useSelector(state => state.news)
 
     console.log(cart);
 
     useEffect(() => {
         dispatch(GetListCategory())
         dispatch(GetAllProductPaging(1, 8));
+        dispatch(GetNewsList())
     }, []);
 
     const handleAddToCart = (product) => {
@@ -90,6 +94,7 @@ const Home = () => {
 
     return (
         <>
+            <HomeCarousel />
             <div className={classes.category}>
                 <Container maxWidth="lg">
                     <div className={classes.newProductTitle}>
@@ -123,6 +128,24 @@ const Home = () => {
                             key={item.maSp}
                         >
                             <ShopProductCard product={item} onClickAddToCard={handleAddToCart}/>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
+            <Container maxWidth="lg">
+                <div className={classes.newProductTitle}>
+                    <Typography variant="h2" align="center" gutterBottom >News</Typography>
+                </div>
+                <Grid container className={classes.newProduct}>
+                    <Grid item xs={12} className={classes.viewAll}>
+                        <Button component={Link} to="/#" className={classes.viewAllButton}>View all</Button>
+                    </Grid>
+                    {listNews.map((item) => (
+                        <Grid item md={3} sm={6} xs={12}
+                            className={classes.productCard}
+                            key={item.maTinTuc}
+                        >
+                            <NewsCard post={item} />
                         </Grid>
                     ))}
                 </Grid>

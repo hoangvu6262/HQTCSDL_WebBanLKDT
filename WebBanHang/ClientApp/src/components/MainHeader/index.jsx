@@ -113,6 +113,13 @@ const CustomIconButton = styled(IconButton)({
     }
 })
 
+const CustomMenuItem = styled(MenuItem)({
+    "&:hover": {
+        color: "#000",
+        textDecoration: "none !important"
+    }
+})
+
 const MainHeader =() =>{
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -142,24 +149,24 @@ const MainHeader =() =>{
     const AccMenu = () => {
         return (
             <MenuList>
-                <MenuItem>
+                <CustomMenuItem component={Link} to={`/profile&userid=${customor.id}`}>
                     <ListItemIcon>
                         <AccountBoxOutlinedIcon fontSize="small" />
                     </ListItemIcon>
                     <AccToggleText>Profile</AccToggleText>
-                </MenuItem>
-                <MenuItem>
+                </CustomMenuItem>
+                <CustomMenuItem>
                     <ListItemIcon>
                         <ShoppingBagOutlinedIcon fontSize="small" />
                     </ListItemIcon>
                     <AccToggleText>Orders</AccToggleText>
-                </MenuItem>
-                <MenuItem>
+                </CustomMenuItem>
+                <CustomMenuItem>
                     <ListItemIcon>
                         <SettingsApplicationsOutlinedIcon fontSize="small" />
                     </ListItemIcon>
                     <AccToggleText>Setting</AccToggleText>
-                </MenuItem>
+                </CustomMenuItem>
                 <Divider />
                 <MenuItem onClick={handleLogOut}>
                     <ListItemIcon>
@@ -220,7 +227,7 @@ const MainHeader =() =>{
                             </div>
                         ) : <Box>
                                 <AccountButton component={Link} to="/login">Sign In</AccountButton>
-                                <AccountButton>Register</AccountButton>
+                                <AccountButton component={Link} to="/register">Register</AccountButton>
                         </Box>}
 
                         {location.pathname === "/cart" ? null : (

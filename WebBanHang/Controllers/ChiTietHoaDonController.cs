@@ -44,7 +44,7 @@ namespace WebBanHang.Controllers
             return chiTietHoaDon;
         }
 
-        // POST: thêm Chi tiết hóa đơn - api/KhachHang/AddBillDetail
+        // POST: thêm Chi tiết hóa đơn - api/ChiTietHoaDon/AddBillDetail
         [HttpPost("AddBillDetail")]
         public async Task<ActionResult<ChiTietHoaDon>> AddBillDetail(ChiTietHoaDon insert)
         {

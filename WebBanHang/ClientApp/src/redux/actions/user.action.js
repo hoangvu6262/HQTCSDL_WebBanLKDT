@@ -17,7 +17,9 @@ import {
     SET_ADMIN_ROLE_SUCCESS,
     SET_ADMIN_ROLE_FAIL,
     DELETE_USER_SUCCESS,
-    DELETE_USER_FAIL
+    DELETE_USER_FAIL,
+    REGISTER_SUCCESS,
+    REGISTER_FAIL
 } from "../constants/user.constant";
 import action from './action';
 
@@ -154,6 +156,7 @@ export const DeleteUser = (id) => {
     }
 }
 
+// Add user
 export const AddUser = (addData, openDialog, setOpenDialog) => {
     return (dispatch) => {
         axios.post(`http://localhost:31051/api/KhachHang/AddCustomor`, addData)
@@ -166,6 +169,30 @@ export const AddUser = (addData, openDialog, setOpenDialog) => {
                 setOpenDialog({ ...openDialog, open: false });
                 dispatch(action(ADD_USER_SUCCESS, notification));
                 dispatch(GetAllUserPaging(1, 3))
+            })
+            .catch((err) => {
+                const notification = {
+                    open: true,
+                    severity: "error",
+                    message: err.request.responseText,
+                };
+                dispatch(action(ADD_USER_FAIL, notification));
+            })
+    }
+}
+
+// Add user
+export const CustomRegister = (addData, history) => {
+    return (dispatch) => {
+        axios.post(`http://localhost:31051/api/KhachHang/AddCustomor`, addData)
+            .then((res) => {
+                const notification = {
+                    open: true,
+                    severity: "success",
+                    message: "Register thành công",
+                };
+                dispatch(action(ADD_USER_SUCCESS, notification));
+                history.push("/login")
             })
             .catch((err) => {
                 const notification = {

@@ -73,8 +73,8 @@ namespace WebBanHang.Controllers
 
         }
 
-        // DELETE: xóa Danh mục - api/KhachHang/DeleteCategory/id
-        [HttpDelete("DeleteCategory/{id}")]
+        // DELETE: xóa Danh mục - api/KhachHang/DeleteComment/id
+        [HttpDelete("DeleteComment/{id}")]
         public async Task<ActionResult> DeleteCategory(int id)
         {
             var IdParam = new SqlParameter("@MaBL", id);

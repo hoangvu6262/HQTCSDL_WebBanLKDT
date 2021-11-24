@@ -5,7 +5,7 @@ import CartProductCard from "../../../components/Card/CartProductCard";
 import { Grid, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import action from "../../../redux/actions/action";
-import { CheckOut } from "../../../redux/actions/bill.action";
+import { CheckOut, AddBillDetail } from "../../../redux/actions/bill.action";
 import Notification from "../../../components/Notification"
 
 const useStyles = makeStyles({
