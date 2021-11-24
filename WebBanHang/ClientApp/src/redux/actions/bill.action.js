@@ -154,7 +154,7 @@ export const PutAdConfirm = (id) => {
 //add Bill
 export const AddBill = (addData, openDialog, setOpenDialog) => {
     return (dispatch) => {
-        axios.post(`http://localhost:31051/api/SanPham/AddProduct`, addData)
+        axios.post(`http://localhost:31051/api/HoaDon/AddBill`, addData)
             .then((res) => {
                 const notification = {
                     open: true,
@@ -170,6 +170,30 @@ export const AddBill = (addData, openDialog, setOpenDialog) => {
                     open: true,
                     severity: "error",
                     message: err.request.responseText,
+                };
+                dispatch(action(ADD_BILL_FAIL, notification));
+            })
+    }
+}
+
+//Checkout 
+export const CheckOut = (addData) => {
+    return (dispatch) => {
+        console.log(addData)
+        axios.post(`http://localhost:31051/api/HoaDon/CheckOutOrder`, addData)
+            .then((res) => {
+                const notification = {
+                    open: true,
+                    severity: "success",
+                    message: "CheckOut Success.",
+                };
+                dispatch(action(ADD_BILL_SUCCESS, notification));
+            })
+            .catch((err) => {
+                const notification = {
+                    open: true,
+                    severity: "error",
+                    message: "Checkout Error!",
                 };
                 dispatch(action(ADD_BILL_FAIL, notification));
             })

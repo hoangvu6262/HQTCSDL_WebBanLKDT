@@ -221,7 +221,11 @@ namespace WebBanHang.Controllers
 
                     var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenString);
 
-                    return Ok(accessToken);
+                    return Ok(new { 
+                        id = user.MaKhachHang,
+                        account = user.TenDangNhap,
+                        token = accessToken
+                    });
                 }
                 else
                 {
@@ -264,7 +268,13 @@ namespace WebBanHang.Controllers
 
                     var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenString);
 
-                    return Ok(accessToken);
+                    return Ok(new
+                    {
+                        id = user.MaKhachHang,
+                        account = user.TenDangNhap,
+                        role = "Admin",
+                        token = accessToken
+                    });
                 }
                 else
                 {

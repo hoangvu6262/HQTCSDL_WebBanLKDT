@@ -7,10 +7,10 @@ namespace WebBanHang.Models
 {
     public partial class HoaDon
     {
-        public HoaDon()
-        {
-            ChiTietHoaDons = new HashSet<ChiTietHoaDon>();
-        }
+        //public HoaDon()
+        //{
+        //    ChiTietHoaDons = new List<ChiTietHoaDon>();
+        //}
 
         public int MaHoaDon { get; set; }
         public int? MaKhachHang { get; set; }
@@ -20,6 +20,6 @@ namespace WebBanHang.Models
         public byte? TinhTrang { get; set; }
 
         public virtual KhachHang MaKhachHangNavigation { get; set; }
-        public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; }
+        public virtual List<ChiTietHoaDon> ChiTietHoaDons { get; set; }
     }
 }

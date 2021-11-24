@@ -27,6 +27,8 @@ const intialState = {
     PageNumber: 0,
     notification: {},
     isAdminLogin: false,
+    isCustomorLogin: JSON.parse(localStorage.getItem("isCustomorLogin")) ?? false,
+    customor: JSON.parse(localStorage.getItem("customorLogin")) ?? {},
 }
 
 const UserReducer = (state = intialState, action) => {
@@ -54,15 +56,23 @@ const UserReducer = (state = intialState, action) => {
             state.notification.open = payload;
             return { ...state };
         }
+        case CUSTOMOR_LOGIN_SUCCESS:
+            return { ...state, isCustomorLogin: true, customor: payload };
+        case CUSTOMOR_LOGIN_FAIL:
+            return { ...state, notification: payload };
         case ADMIN_LOGIN_SUCCESS:
             return { ...state, isAdminLogin: true};
         case ADMIN_LOGIN_FAIL:
-            console.log(payload)
             return { ...state, notification: payload };
         case "ADMIN_LOGIN_AUTO":
             return { ...state, isAdminLogin: payload };
         case "ADMIN_LOGOUT":
             return { ...state, isAdminLogin: payload };
+        case "CUSTOMOR_LOGOUT":
+            localStorage.removeItem("isCustomorLogin");
+            localStorage.removeItem("customorLogin");
+            return {
+                ...state, isCustomorLogin: payload, customor: {}};
         case ADD_USER_SUCCESS:
             return { ...state, notification: payload };
         case ADD_USER_FAIL:

@@ -6,7 +6,7 @@ export const GetListCategory = () => {
     return (dispatch) => {
         axios.get("http://localhost:31051/api/DanhMuc/GetAllCategories")
             .then((res) => {
-                console.log(res.data);
+                //console.log(res.data);
                 dispatch(action(GET_LIST_CATEGORY_SUCCESS, res.data))
             })
             .catch((err) => {

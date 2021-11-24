@@ -7,7 +7,11 @@ import UserDetail from "../pages/Admin/UserDetail";
 import EditProduct from "../pages/Admin/ProductEdit";
 import Bill from "../pages/Admin/Bill";
 import News from "../pages/Admin/News"
-import Home from "../pages/Main/Home"
+import Home from "../pages/Main/Home";
+import Cart from "../pages/Main/Cart";
+import ListProducts from "../pages/Main/ListProducts";
+import MainProductDetail from "../pages/Main/ProductDetail";
+
 
 export const adminRouter = [
   {
@@ -67,6 +71,27 @@ export const mainRouter = [
         exact: true,
         Component: Home,
     },
+    {
+        path: "/cart",
+        exact: false,
+        Component: Cart,
+    },
+    {
+        path: "/listproducts",
+        exact: false,
+        Component: ListProducts
+    },
+    {
+        path: "/list-products&categoryid=:id",
+        exact: false,
+        Component: ListProducts
+    },
+    {
+        path: "/product-detail&product-id=:id",
+        exact: false,
+        Component: MainProductDetail
+    }
+    
 ]
 
     

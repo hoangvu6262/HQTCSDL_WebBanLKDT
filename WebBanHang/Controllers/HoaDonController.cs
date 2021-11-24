@@ -105,6 +105,25 @@ namespace WebBanHang.Controllers
 
         }
 
+        // POST: thêm Hóa đơn - api/HoaDon/CheckOutOrder
+        [HttpPost("CheckOutOrder")]
+        public async Task<ActionResult<HoaDon>> CheckOutOrder(HoaDon insert)
+        {
+            //var MaKhachHangParam = new SqlParameter("@MaKhachHang", insert.MaKhachHang);
+            //var TongTienParam = new SqlParameter("@TongTien", insert.TongTien);
+
+            //await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertHD @MaKhachHang, @TongTien",
+            //        MaKhachHangParam, TongTienParam);
+
+            //return Ok("add success");
+
+            _context.HoaDons.Add(insert);
+            await _context.SaveChangesAsync();
+
+            return Ok("CheckOut Success.");
+
+        }
+
         // DELETE: xóa Hóa Đơn - api/HoaDon/DeleteBill/id
         [HttpDelete("DeleteBill/{id}")]
         public async Task<ActionResult> DeleteBill(int id)

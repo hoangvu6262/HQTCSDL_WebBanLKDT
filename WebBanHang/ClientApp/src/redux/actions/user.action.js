@@ -60,12 +60,18 @@ export const CustomorLogin = (data) => {
         axios.post(`http://localhost:31051/api/KhachHang/CustomorLogin`, data)
             .then((res) => {
                 //console.log(res.data);
-
+                localStorage.setItem("customorLogin", JSON.stringify(res.data))
+                localStorage.setItem("isCustomorLogin", JSON.stringify(true))
                 dispatch(action(CUSTOMOR_LOGIN_SUCCESS, res.data))
             })
             .catch((err) => {
                 //console.log(err);
-                dispatch(action(CUSTOMOR_LOGIN_FAIL, err))
+                const notification = {
+                    open: true,
+                    severity: "error",
+                    message: err.request.responseText,
+                };
+                dispatch(action(CUSTOMOR_LOGIN_FAIL, notification))
             })
     }
 }

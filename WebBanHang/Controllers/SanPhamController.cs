@@ -22,7 +22,7 @@ namespace WebBanHang.Controllers
             _context = context;
         }
 
-        // GET: api/SanPham
+        // GET: api/SanPham/GetAllProducts
         [HttpGet("GetAllProducts")]
         public async Task<ActionResult<IEnumerable<F_GetProducts>>> GetSanPhams()
         {

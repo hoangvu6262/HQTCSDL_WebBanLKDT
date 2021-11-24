@@ -14,7 +14,9 @@ import {
     ADD_PRODUCT_SUCCESS,
     ADD_PRODUCT_FAIL,
     GET_PRODUCTS_BY_CATEGORY_SUCCESS,
-    GET_PRODUCTS_BY_CATEGORY_FAIL
+    GET_PRODUCTS_BY_CATEGORY_FAIL,
+    GET_RELATED_PRODUCTS_SUCCESS,
+    GET_RELATED_PRODUCTS_FAIL
 } from "../constants/product.constant";
 
 
@@ -28,6 +30,20 @@ export const GetAllProductPaging = (pageNumber, PageSize) => {
             })
             .catch((err) => {
                 dispatch(action(GET_ALL_PRODUCT_PAGING_FAIL, err));
+            })
+    }
+}
+
+// get related products
+export const GetRelatedProducts = (MaSP, TenDanhMuc) => {
+    return (dispatch) => {
+        axios.get(`http://localhost:31051/api/SanPham/GetRelatedProducts?MaSP=${MaSP}&TenDanhMuc=${TenDanhMuc}`)
+            .then((res) => {
+                //console.log(res.data);
+                dispatch(action(GET_RELATED_PRODUCTS_SUCCESS, res.data));
+            })
+            .catch((err) => {
+                dispatch(action(GET_RELATED_PRODUCTS_FAIL, err));
             })
     }
 }

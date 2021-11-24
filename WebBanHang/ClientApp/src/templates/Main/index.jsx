@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Route } from "react-router-dom";
 import MainHeader from "../../components/MainHeader";
 import { makeStyles } from "@mui/styles";
-import { Grid, Container } from "@mui/material"
+import Announcement from "../../components/Announcement"
 
 const useStyles = makeStyles({
-    main: {
-        
-    }
+    container: {
+        marginTop: 64,
+    },
 })
 
 
@@ -17,13 +17,13 @@ const MainTemplate = (props) => {
     return (
         <>
             <MainHeader />
-            <Container maxWidth="lg">
-                <main className={classes.main}>
-                    {props.children}
-                </main>
-            </Container>
+            <div className={classes.container}> 
+                <Announcement />
+            </div>
             
-            
+            <main className={classes.main}>
+                {props.children}
+            </main>   
         </>
     );
 };

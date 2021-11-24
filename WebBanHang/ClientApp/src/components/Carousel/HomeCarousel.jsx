@@ -1,9 +1,14 @@
 ﻿import React from "react";
 import { UncontrolledCarousel } from "reactstrap";
+import { styled } from "@mui/styles"
+
+const CustomContainer = styled('div')({
+    height: "60vh"
+})
 
 const HomeCarousel = () => {
     return (
-        <>
+        <CustomContainer>
             <UncontrolledCarousel
                 items={[
                     {
@@ -26,7 +31,7 @@ const HomeCarousel = () => {
                     }
                 ]}
             />
-        </>
+        </CustomContainer>
         )
 }
 

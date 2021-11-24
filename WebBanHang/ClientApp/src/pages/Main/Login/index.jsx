@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
         alignContent: "center",
         alignItems: "center"
     },
-    
-    loginPageContent: {       
+
+    loginPageContent: {
         display: "flex !important",
         justifyContent: "center",
         alignContent: "center",
@@ -52,11 +52,11 @@ const useStyles = makeStyles((theme) => ({
         height: "auto",
         backgroundColor: "#fff",
     },
-   
-    
+
+
 }));
 
-export default function CustomLoginPage(props) {
+export default function LoginPage(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -75,7 +75,7 @@ export default function CustomLoginPage(props) {
                     <div className={classes.logo}>
                         <p>LOGIN</p>
                     </div>
-                    <LoginForm isAdmin={true} />
+                    <LoginForm isAdmin={false} />
                 </div>
             </Container>
 

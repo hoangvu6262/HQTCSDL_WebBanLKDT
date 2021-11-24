@@ -1,20 +1,40 @@
-﻿import * as React from 'react';
+﻿import React, { useState} from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+import {
+    Divider,
+    AppBar,
+    Box,
+    Toolbar,
+    Button,
+    IconButton,
+    Typography,
+    InputBase,
+    Badge,
+    Fade,
+    Paper,
+    Popper,
+    MenuList,
+    MenuItem,
+    ListItemText,
+    ListItemIcon,
+    Hidden
+} from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
+import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import ShoppingBasketOutlinedIcon from '@mui/icons-material/ShoppingBasketOutlined';
+import SettingsApplicationsOutlinedIcon from '@mui/icons-material/SettingsApplicationsOutlined';
+import Logout from '@mui/icons-material/Logout';
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import action from "../../redux/actions/action"
+
+
+const CustomAppBar = styled(AppBar)({
+    color: "#000 !important",
+    backgroundColor: "#fff !important",
+})
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -56,125 +76,121 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
+
+const AccountButton = styled(Button)({
+    color: "#000",
+    marginTop: 7,
+    fontFamily: "'Urbanist', sans- serif",
+    "&:hover": {
+        color: "#000",
+        textDecoration: "none !important"
+    }
+});
+
+const AccountPopper = styled(Popper)({
+    zIndex: 2
+})
+
+const AccToggle = styled(Paper)({
+    padding: 10,
+    fontFamily: "'Urbanist', sans- serif !important",
+    color: "#000",
+    width: 200
+})
+
+const AccToggleText = styled(ListItemText)({
+    paddingLeft: 25,
+    color: "#000",
+    "& span": {
+        fontFamily: "'Urbanist', sans- serif !important",
+    }
+})
+
+const CustomIconButton = styled(IconButton)({
+    "&:hover": {
+        color: "#000",
+        textDecoration: "none !important"
+    }
+})
+
 const MainHeader =() =>{
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const [open, setOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
 
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const location = useLocation();
 
-    const handleProfileMenuOpen = (event) => {
+    const dispatch = useDispatch();
+
+    const { cart, } = useSelector(state => state.product)
+    const { customor, isCustomorLogin } = useSelector(state => state.user)
+
+    //console.log(customor)
+
+    const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        setOpen((previousOpen) => !previousOpen);
     };
 
-    const handleMobileMenuClose = () => {
-        setMobileMoreAnchorEl(null);
-    };
+    const canBeOpen = open && Boolean(anchorEl);
+    const id = canBeOpen ? 'transition-popper' : undefined;
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        handleMobileMenuClose();
-    };
+    const handleLogOut = () => {
+        dispatch(action("CUSTOMOR_LOGOUT", false));
+    }
 
-    const handleMobileMenuOpen = (event) => {
-        setMobileMoreAnchorEl(event.currentTarget);
-    };
 
-    const menuId = 'primary-search-account-menu';
-    const renderMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        </Menu>
-    );
+    const AccMenu = () => {
+        return (
+            <MenuList>
+                <MenuItem>
+                    <ListItemIcon>
+                        <AccountBoxOutlinedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <AccToggleText>Profile</AccToggleText>
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <ShoppingBagOutlinedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <AccToggleText>Orders</AccToggleText>
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <SettingsApplicationsOutlinedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <AccToggleText>Setting</AccToggleText>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleLogOut}>
+                    <ListItemIcon>
+                        <Logout fontSize="small" />
+                    </ListItemIcon>
+                    <AccToggleText>LogOut</AccToggleText>
+                </MenuItem>
+            </MenuList>
+            )
+    }
 
-    const mobileMenuId = 'primary-search-account-menu-mobile';
-    const renderMobileMenu = (
-        <Menu
-            anchorEl={mobileMoreAnchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id={mobileMenuId}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMobileMenuOpen}
-            onClose={handleMobileMenuClose}
-        >
-            <MenuItem>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={4} color="error">
-                        <MailIcon />
-                    </Badge>
-                </IconButton>
-                <p>Messages</p>
-            </MenuItem>
-            <MenuItem>
-                <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    color="inherit"
-                >
-                    <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-                <p>Notifications</p>
-            </MenuItem>
-            <MenuItem onClick={handleProfileMenuOpen}>
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <AccountCircle />
-                </IconButton>
-                <p>Profile</p>
-            </MenuItem>
-        </Menu>
-    );
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <CustomAppBar>
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}
-                    >
-                        MUI
-          </Typography>
+                    <Hidden mdUp>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 2 }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    </Hidden>
+                    
+                    <Link to="/">
+                        <img src="https://theme.hstatic.net/1000026716/1000440777/14/logo.svg?v=22841" alt="logo" width="150"/>
+                    </Link>
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />
@@ -185,49 +201,38 @@ const MainHeader =() =>{
                         />
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
-                        >
-                            <Badge badgeContent={17} color="error">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </Box>
-                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreIcon />
-                        </IconButton>
+                    <Box sx={{ display: { xs: 'flex' } }}>
+
+                        {isCustomorLogin ? (
+                            <div>
+                                <AccountButton aria-describedby={id} type="button" onClick={handleClick}>
+                                    {customor.account}
+                                </AccountButton>
+                                <AccountPopper id={id} open={open} anchorEl={anchorEl} transition disablePortal>
+                                    {({ TransitionProps }) => (
+                                        <Fade {...TransitionProps} timeout={350}>
+                                            <AccToggle>
+                                                {AccMenu()}
+                                             </AccToggle>
+                                        </Fade>
+                                    )}
+                                </AccountPopper>
+                            </div>
+                        ) : <Box>
+                                <AccountButton component={Link} to="/login">Sign In</AccountButton>
+                                <AccountButton>Register</AccountButton>
+                        </Box>}
+
+                        {location.pathname === "/cart" ? null : (
+                            <CustomIconButton component={Link} to="/cart" size="large" aria-label="show 4 new mails" color="inherit">
+                                <Badge badgeContent={cart.quantity} color="error">
+                                    <ShoppingBasketOutlinedIcon />
+                                </Badge>
+                            </CustomIconButton>
+                        )}
                     </Box>
                 </Toolbar>
-            </AppBar>
-            {renderMobileMenu}
-            {renderMenu}
+            </CustomAppBar>
         </Box>
     );
 }

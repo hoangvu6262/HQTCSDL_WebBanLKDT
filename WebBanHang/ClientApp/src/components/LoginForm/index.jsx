@@ -1,7 +1,6 @@
 ﻿import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { CustomorLogin, AdminLogin } from "../../redux/actions/user.action";
-import { useHistory } from "react-router-dom";
 import {
     TextField,
     InputAdornment,
@@ -63,13 +62,13 @@ export default function LoginForm(props) {
     const { isAdmin } = props;
     const classes = useStyles();
     const dispatch = useDispatch();
-    const history = useHistory();
     const [pass, setPass] = useState(true);
+
     // click sẽ thay đổi pass thành false, hiện thị mật khẩu
     const handleChangePassOrText = () => {
         setPass(!pass);
     };
-    console.log(isAdmin);
+    
     return (
         <div>
             <Formik
@@ -83,8 +82,12 @@ export default function LoginForm(props) {
                         .required("Password is required"),
                 })}
                 onSubmit={(values) => {
-                    console.log(values);
-                    dispatch(AdminLogin(values));
+                    if (isAdmin) {
+                        dispatch(AdminLogin(values));
+                    } else {
+                        dispatch(CustomorLogin(values));
+                    }
+                    
                 }}
             >
                 {(formik) => (
