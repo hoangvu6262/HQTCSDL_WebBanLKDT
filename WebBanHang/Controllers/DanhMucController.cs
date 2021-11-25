@@ -43,7 +43,7 @@ namespace WebBanHang.Controllers
         }
 
 
-        // GET: Lấy thông tin chi tiết Danh muc theo id -  api/KhachHang/GetBillDetail/5
+        // GET: Lấy thông tin chi tiết Danh muc theo id -  api/DanhMuc/GetCategoryDetailById/5
         [HttpGet("GetCategoryDetailById/{id}")]
         public async Task<ActionResult<DanhMuc>> GetCategoryDetailById(int id)
         {
@@ -61,7 +61,7 @@ namespace WebBanHang.Controllers
             return danhMuc;
         }
 
-        // POST: thêm Danh mục - api/KhachHang/AddCategory
+        // POST: thêm Danh mục - api/DanhMuc/AddCategory
         [HttpPost("AddCategory")]
         public async Task<ActionResult<DanhMuc>> AddCategory(DanhMuc insert)
         {
@@ -74,7 +74,7 @@ namespace WebBanHang.Controllers
 
         }
 
-        // DELETE: xóa Danh mục - api/KhachHang/DeleteCategory/id
+        // DELETE: xóa Danh mục - api/DanhMuc/DeleteCategory/id
         [HttpDelete("DeleteCategory/{id}")]
         public async Task<ActionResult> DeleteCategory(int id)
         {
@@ -85,7 +85,7 @@ namespace WebBanHang.Controllers
             return Ok("Delete category success!");
         }
 
-        // PUT: update danh mục - api/HoaDon/UpdateCategory/{id}
+        // PUT: update danh mục - api/DanhMuc/UpdateCategory/{id}
         [HttpPut("UpdateCategory/{id}")]
         public async Task<ActionResult> UpdateCategory(int id, DanhMuc updateData)
         {

@@ -155,7 +155,7 @@ export default function CustomDrawer(props) {
               </ListItemIcon>
 
               <ListItemText
-                primary={adminUser.tenDangNhap}
+                primary={adminUser.account}
                 className={classes.navlinkText}
               />
               {open ? (

@@ -54,7 +54,12 @@ export default function Bill() {
 
     const [openDialog, setOpenDialog] = useState({
         open: false,
+        isAddBill: false,
         title: "",
+        maKhachHang: 0,
+        tongTien: 0,
+        status: 0,
+        id: 0,
     });
 
     const [value, setValue] = React.useState("All");
@@ -77,7 +82,12 @@ export default function Bill() {
     const handleOnlick = () => {
         setOpenDialog({
             open: true,
+            isAddBill: true,
             title: "Thêm Hóa đơn",
+            maKhachHang: 0,
+            tongTien: 0,
+            status: 0,
+            id: 0,
         });
     };
 
@@ -114,7 +124,7 @@ export default function Bill() {
                         />
                     </Paper>
                     <Paper className={classes.tablePaper}>
-                        <BillTable />
+                        <BillTable openDialog={openDialog} setOpenDialog={setOpenDialog} />
                     </Paper>
                 </Grid>
             </Grid>

@@ -65,7 +65,9 @@ const headerName = [
 
 export default function BillTable(props) {
     const classes = useStyles();
-    //const { rows } = props;
+    const { openDialog, setOpenDialog } = props;
+
+    
 
     const { listBillsPaging, totalPage, PageNumber } = useSelector((state) => state.bill);
 
@@ -86,16 +88,24 @@ export default function BillTable(props) {
         history.push(`/admin/bills/billdetail/${id}`);
     }
 
-    const handleOnclickEdit = (id) => {
-        history.push(`/admin/products/editproduct/${id}`);
+    const handleOnclickEdit = (id, status, maKhachHang, tongTien) => {
+        setOpenDialog({
+            open: true,
+            isAddBill: false,
+            title: "Update Bill",
+            maKhachHang: maKhachHang,
+            tongTien: tongTien,
+            status: status,
+            id: id,
+        });
     }
 
     const handleOnclickDelete = (id) => {
         dispatch(DeleteBill(id));
     }
 
-    const renderCategory = (Id) => {
-        switch (Id) {
+    const renderStatus= (status) => {
+        switch (status) {
             case 1:
                 return (<Chip color="secondary" size="small" label="Chờ Duyệt" />);
             case 2:
@@ -135,7 +145,7 @@ export default function BillTable(props) {
                                 <TableCell>{row.tongTien}</TableCell>
                                 <TableCell>{row.thoiGian}</TableCell>
                                 <TableCell>{row.capNhat}</TableCell>
-                                <TableCell>{renderCategory(row.tinhTrang)}</TableCell>
+                                <TableCell>{renderStatus(row.tinhTrang)}</TableCell>
                                 <TableCell>
                                     <Tooltip title="Delete Bill" arrow>
                                         <IconButton
@@ -150,7 +160,7 @@ export default function BillTable(props) {
                                     </Tooltip>
                                     <Tooltip title="Edit Bill" arrow>
                                         <IconButton
-                                            //onClick={() => handleOnclickEdit(row.maSp)}
+                                            onClick={() => handleOnclickEdit(row.maHoaDon, row.tinhTrang, row.maKhachHang, row.tongTien)}
                                             className={classes.iconButton}
                                             style={{
                                                 backgroundColor: "rgb(206, 147, 216)",

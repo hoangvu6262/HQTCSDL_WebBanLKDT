@@ -72,7 +72,7 @@ const ProductReducer = (state = initialState, action) => {
         case ADD_PRODUCT_FAIL:
             return { ...state, notification: payload };
         case GET_PRODUCTS_BY_CATEGORY_SUCCESS:
-            return { ...state, listProductsPaging: payload }
+            return { ...state, listProductsPaging: payload, totalPage: 0 }
         case GET_PRODUCTS_BY_CATEGORY_FAIL:
             return { ...state }
         case UPDATE_PRODUCT_SUCCESS:
@@ -135,6 +135,15 @@ const ProductReducer = (state = initialState, action) => {
             removeState.cart.total -= total;
             return removeState;
         }
+        case "CUSTOMOR_LOGOUT":
+            return {
+                ...state,
+                cart: {
+                    products: [],
+                    quantity: 0,
+                    total: 0,
+                }
+            };
 
         default:
             return { ...state }

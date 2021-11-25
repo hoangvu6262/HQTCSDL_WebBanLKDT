@@ -62,7 +62,7 @@ const UserReducer = (state = intialState, action) => {
         case CUSTOMOR_LOGIN_FAIL:
             return { ...state, notification: payload };
         case ADMIN_LOGIN_SUCCESS:
-            return { ...state, isAdminLogin: true};
+            return { ...state, isAdminLogin: true, adminLoginUser: payload };
         case ADMIN_LOGIN_FAIL:
             return { ...state, notification: payload };
         case "ADMIN_LOGIN_AUTO":

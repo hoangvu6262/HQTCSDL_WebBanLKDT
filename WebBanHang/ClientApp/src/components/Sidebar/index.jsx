@@ -15,6 +15,7 @@ import KeyboardOutlinedIcon from "@mui/icons-material/KeyboardOutlined";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
+import { useSelector, useDispatch } from "react-redux"
 
 const drawerWidth = 280;
 
@@ -72,7 +73,10 @@ const adminUser = {
 
 function Sidebar(props) {
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+
+    const { adminLoginUser } = useSelector(state => state.user)
+    console.log(adminLoginUser)
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -130,7 +134,7 @@ function Sidebar(props) {
           }}
         >
           {/* {drawer} */}
-          <CustomDrawer adminUser={adminUser} sidebarList={sidebarList} />
+          <CustomDrawer adminUser={adminLoginUser} sidebarList={sidebarList} />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -144,7 +148,7 @@ function Sidebar(props) {
           open
         >
           {/* {drawer} */}
-          <CustomDrawer adminUser={adminUser} sidebarList={sidebarList} />
+          <CustomDrawer adminUser={adminLoginUser} sidebarList={sidebarList} />
         </Drawer>
       </Box>
       <Box
