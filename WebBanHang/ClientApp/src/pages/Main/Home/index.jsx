@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect} from "react";
 import HomeCarousel from "../../../components/Carousel/HomeCarousel";
+import PosterCard from "../../../components/PosterCard";
 import { GetAllProductPaging } from "../../../redux/actions/product.action";
 import { GetNewsList } from "../../../redux/actions/news.action"
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +11,11 @@ import { ADD_TO_CART_SUCCESS } from "../../../redux/constants/product.constant";
 import action from "../../../redux/actions/action";
 import { GetListCategory } from "../../../redux/actions/category.action";
 import { Link } from "react-router-dom";
-import NewsCard from "../../../components/Card/NewsCard"
+import NewsCard from "../../../components/Card/NewsCard";
+import CategoryDrawer from "../CategoryDrawer/CategoryDrawer";
+import posterList from "./posterList.js";
+import TopMegaMenu from "../../../components/TopMegamenu"
+
 
 const useStyles = makeStyles({
     newProduct: {
@@ -29,31 +34,10 @@ const useStyles = makeStyles({
     productCard: {
         padding: "15px",
     },
-    category: {
-        padding: 100,
-        backgroundImage: "url('https://mui.com/static/themes/onepirate/productCurvyLines.png')",
-        backgroundColor: "#fff5f8"
-    },
-    categoryCard: {
-        padding: "15px",
-        
-    },
-    categoryPaper: {
-        textAlign: "center",
-        fontFamily: "'Urbanist', sans- serif",
-        fontWeight: "600 !important",
-        textTransform: "uppercase",
-        borderRadius: "0 !important",
-        "& p": {
-            "&:hover": {
-                textDecoration: "none !important",
-                color: "#000"
-            }
-        },
-        "&:hover": {
-            textDecoration: "none !important",
-            color: "#000"
-        }
+    megeMenuContainer: {
+        paddingBottom: 7,
+        //backgroundImage: "url('https://mui.com/static/themes/onepirate/productCurvyLines.png')",
+        backgroundColor: "#f1f0f1"
     },
     viewAll: {
         paddingRight: 15,
@@ -68,7 +52,21 @@ const useStyles = makeStyles({
         fontFamily: "'Urbanist', sans- serif !important",
         borderRadius: "0 !important",
     },
+    megaMenu: {
+        marginBottom: 5,
+        padding: 5,
+        "&.MuiContainer-maxWidthXl": {
+            maxWidth: 1310,
+        }
+    },
+    menuContainer: {
+        height: "100%",
+    },
+    categoriesMenu: {
+        height: "100%"
+    },
 })
+
 
 const Home = () => {
     const classes = useStyles();
@@ -89,31 +87,55 @@ const Home = () => {
     const handleAddToCart = (product) => {
         dispatch(action(ADD_TO_CART_SUCCESS, product));
     }
-
     
 
     return (
         <>
-            <HomeCarousel />
-            <div className={classes.category}>
-                <Container maxWidth="lg">
-                    <div className={classes.newProductTitle}>
-                        <Typography variant="h2" align="center" gutterBottom >Categories</Typography>
-                    </div>
-                    <Grid container className={classes.newProduct}>
-                        {listCategory.map((item) => (
-                            <Grid item md={3} sm={6} xs={12}
-                                className={classes.categoryCard}
-                                key={item.maDanhMuc}
-                            >
-                                <Paper component={Link} to={`/list-products&categoryid=${item.maDanhMuc}`} className={classes.categoryPaper}>
-                                    <p>{item.tenDanhMuc}</p>
-                                </Paper>
+            <div className={ classes.megeMenuContainer}>
+                <Container maxWidth="xl" className={classes.megaMenu}>
+                    <Grid container spacing={1} className={classes.menuContainer}>
+                        <TopMegaMenu />
+                        <Grid item md={2}>
+                            <Paper className={classes.categoriesMenu} elevation={0}>
+                                <CategoryDrawer listCategory={listCategory} />
+                            </Paper>                           
+                        </Grid>
+                        <Grid item md={10}>
+                            <Grid container>
+                                <Grid item md={8}>
+                                    <HomeCarousel />
+                                    <Grid container>
+                                        {posterList.centerPoster.map((item) => (
+                                            <Grid item md={6} key={item.id}>
+                                                <PosterCard hef={item.hef} imgSrc={item.imageSrc} />
+                                            </Grid>
+                                        ))}
+                                    </Grid>                                   
+                                </Grid>
+                                <Grid item md={4}>
+                                    {posterList.rightPoster.map((item) => (
+                                        <Grid item md={12} key={item.id}>
+                                            <PosterCard hef={item.hef} imgSrc={item.imageSrc} />
+                                        </Grid>
+                                    ))}
+                                </Grid>
                             </Grid>
-                        ))}
+                            
+                        </Grid>
+                        
                     </Grid>
                 </Container>
             </div>
+            <Container maxWidth="xl" className={classes.megaMenu}>
+                <Grid container spacing={1}>
+                    {posterList.bottomPoster.map((item) => (
+                        <Grid item md={3} key={item.id}>
+                            <PosterCard hef={item.hef} imgSrc={item.imageSrc} />
+                        </Grid>
+                    ))}
+
+                </Grid>
+            </Container>
             <Container maxWidth="lg">
                 <div className={classes.newProductTitle}>
                     <Typography variant="h2" align="center" gutterBottom >New Products</Typography>

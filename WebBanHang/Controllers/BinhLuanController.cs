@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Models;
+using WebBanHang.Services.CommentService;
 
 namespace WebBanHang.Controllers
 {
@@ -14,25 +15,25 @@ namespace WebBanHang.Controllers
     [ApiController]
     public class BinhLuanController : ControllerBase
     {
-        private readonly WebBanHangContext _context;
+        private readonly ICommentService _commetnservice;
 
-        public BinhLuanController(WebBanHangContext context)
+        public BinhLuanController(ICommentService commetnservice)
         {
-            _context = context;
+            _commetnservice = commetnservice;
         }
 
         // GET: api/BinhLuan
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BinhLuan>>> GetBinhLuans()
         {
-            return await _context.BinhLuans.ToListAsync();
+            return await _commetnservice.GetBinhLuans();
         }
 
         // GET: api/BinhLuan/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BinhLuan>> GetBinhLuan(int id)
         {
-            var binhLuan = await _context.BinhLuans.FindAsync(id);
+            var binhLuan = await _commetnservice.GetBinhLuan(id);
 
             if (binhLuan == null)
             {
@@ -46,9 +47,7 @@ namespace WebBanHang.Controllers
         [HttpGet("GetCommentsByProductId")]
         public async Task<ActionResult<IEnumerable<BinhLuan>>> GetCommentsByProductId(int productId)
         {
-            var MaSPParam = new SqlParameter("@MaSP", productId);
-
-            var binhLuan = await _context.BinhLuans.FromSqlRaw("SELECT * FROM [dbo].[F_SelectBL] (@MaSP)", MaSPParam).ToListAsync();
+            var binhLuan = await _commetnservice.GetCommentsByProductId(productId);
 
             if (binhLuan == null)
             {
@@ -62,12 +61,7 @@ namespace WebBanHang.Controllers
         [HttpPost("AddComment")]
         public async Task<ActionResult<BinhLuan>> AddComment(BinhLuan insert)
         {
-            var MaSPParam = new SqlParameter("@MaSP", insert.MaSp);
-            var MaKHParam = new SqlParameter("@MaKhachHang", insert.MaKhachHang);
-            var NoiDungParam = new SqlParameter("@NoiDungBinhLuan", insert.NoiDungBinhLuan);
-
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertBL @MaSP, @MaKhachHang, @NoiDungBinhLuan",
-                    MaSPParam, MaKHParam, NoiDungParam);
+            await _commetnservice.AddComment(insert);
 
             return Ok("Add Comment Success");
 
@@ -75,11 +69,9 @@ namespace WebBanHang.Controllers
 
         // DELETE: xóa Danh mục - api/KhachHang/DeleteComment/id
         [HttpDelete("DeleteComment/{id}")]
-        public async Task<ActionResult> DeleteCategory(int id)
+        public async Task<ActionResult> DeleteComment(int id)
         {
-            var IdParam = new SqlParameter("@MaBL", id);
-
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_DeleteBL @MaBL", IdParam);
+            await _commetnservice.DeleteComment(id);
 
             return Ok("Delete Comment Success!");
         }

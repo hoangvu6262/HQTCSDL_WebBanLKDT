@@ -31,7 +31,7 @@ namespace WebBanHang.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Name=WebBanHangDb");
+                optionsBuilder.UseSqlServer("name=WebBanHangDb");
             }
         }
 
@@ -45,9 +45,7 @@ namespace WebBanHang.Models
 
                 entity.ToTable("BinhLuan");
 
-                entity.Property(e => e.MaBl)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MaBL");
+                entity.Property(e => e.MaBl).HasColumnName("MaBL");
 
                 entity.Property(e => e.MaSp).HasColumnName("MaSP");
 
@@ -74,9 +72,7 @@ namespace WebBanHang.Models
 
                 entity.ToTable("ChiTietHoaDon");
 
-                entity.Property(e => e.MaCthd)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MaCTHD");
+                entity.Property(e => e.MaCthd).HasColumnName("MaCTHD");
 
                 entity.Property(e => e.DonGia).HasColumnType("decimal(18, 0)");
 
@@ -99,8 +95,6 @@ namespace WebBanHang.Models
 
                 entity.ToTable("DanhMuc");
 
-                entity.Property(e => e.MaDanhMuc).ValueGeneratedNever();
-
                 entity.Property(e => e.TenDanhMuc).HasMaxLength(100);
             });
 
@@ -109,8 +103,6 @@ namespace WebBanHang.Models
                 entity.HasKey(e => e.MaHoaDon);
 
                 entity.ToTable("HoaDon");
-
-                entity.Property(e => e.MaHoaDon).ValueGeneratedNever();
 
                 entity.Property(e => e.CapNhat).HasColumnType("datetime");
 
@@ -181,8 +173,6 @@ namespace WebBanHang.Models
                 entity.HasKey(e => e.MaTinTuc);
 
                 entity.ToTable("TinTuc");
-
-                entity.Property(e => e.MaTinTuc).ValueGeneratedNever();
 
                 entity.Property(e => e.Ngay).HasColumnType("datetime");
 

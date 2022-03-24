@@ -2,11 +2,11 @@
 import { styled } from "@mui/styles"
 
 const CustomContainer = styled('div')({
-    height: "80vh !important"
+    height: "369,7px !important"
 })
 
 const CustomImg = styled('img')({
-    height: "80vh"
+    height: "369,7px"
 })
 
 const HomeCarousel = () => {

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Models;
+using WebBanHang.Services.BillDetailService;
 
 namespace WebBanHang.Controllers
 {
@@ -14,27 +15,25 @@ namespace WebBanHang.Controllers
     [ApiController]
     public class ChiTietHoaDonController : ControllerBase
     {
-        private readonly WebBanHangContext _context;
+        private readonly IBillDetailService _billdetailservice;
 
-        public ChiTietHoaDonController(WebBanHangContext context)
+        public ChiTietHoaDonController(IBillDetailService billdetailservice)
         {
-            _context = context;
+            _billdetailservice = billdetailservice;
         }
 
         // GET: api/ChiTietHoaDon
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ChiTietHoaDon>>> GetChiTietHoaDons()
+        public async Task<ActionResult<IEnumerable<ChiTietHoaDon>>> GetAllBillDetail()
         {
-            return await _context.ChiTietHoaDons.ToListAsync();
+            return await _billdetailservice.GetAllBillDetail();
         }
 
         // GET: api/ChiTietHoaDon/GetBillDetailByBillId
         [HttpGet("GetBillDetailByBillId")]
-        public async Task<ActionResult<IEnumerable<ChiTietHoaDon>>> GetChiTietHoaDon(int MaHoaDon)
+        public async Task<ActionResult<IEnumerable<ChiTietHoaDon>>> GetBillDetailByBillId(int MaHoaDon)
         {
-            var MaHoaDonParam = new SqlParameter("@MaHoaDon", MaHoaDon);
-
-            var chiTietHoaDon = await _context.ChiTietHoaDons.FromSqlRaw("SELECT * FROM[dbo].[F_SelectCTHD](@MaHoaDon)", MaHoaDonParam).ToListAsync();
+            var chiTietHoaDon = await _billdetailservice.GetBillDetailByBillId(MaHoaDon);
 
             if (chiTietHoaDon == null)
             {
@@ -48,13 +47,7 @@ namespace WebBanHang.Controllers
         [HttpPost("AddBillDetail")]
         public async Task<ActionResult<ChiTietHoaDon>> AddBillDetail(ChiTietHoaDon insert)
         {
-            var MaSpParam = new SqlParameter("@MaSP", insert.MaSp);
-            var MaHoaDonParam = new SqlParameter("@MaHoaDon", insert.MaHoaDon);
-            var SoLuongParam = new SqlParameter("@Soluong", insert.SoLuong);
-            var DonGiaParam = new SqlParameter("@DonGia", insert.DonGia);
-
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertCTHD @MaSP, @MaHoaDon, @SoLuong, @DonGia",
-                    MaSpParam, MaHoaDonParam, SoLuongParam, DonGiaParam);
+            await _billdetailservice.AddBillDetail(insert);
 
             return Ok("Add Bill Detail Success");
 

@@ -12,6 +12,13 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text;
+using WebBanHang.Services.BillDetailService;
+using WebBanHang.Services.BillService;
+using WebBanHang.Services.CategoriesService;
+using WebBanHang.Services.CommentService;
+using WebBanHang.Services.NewsService;
+using WebBanHang.Services.ProductsService;
+using WebBanHang.Services.UserService;
 
 namespace WebBanHang
 {
@@ -27,8 +34,15 @@ namespace WebBanHang
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllersWithViews();
+            services.AddControllers();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICategoriesService, CategoriesService>();
+            services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IBillDetailService, BillDetailService>();
+            services.AddScoped<INewsService, NewsService>();
+            services.AddScoped<IBillService, BillService>();
 
             // add mvc
             services.AddMvc(option => option.EnableEndpointRouting = false)

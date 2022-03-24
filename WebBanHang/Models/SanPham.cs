@@ -23,6 +23,7 @@ namespace WebBanHang.Models
         public string Anh1 { get; set; }
         public string Anh2 { get; set; }
         public string Anh3 { get; set; }
+        public string ChiTietSanPham { get; set; }
 
         public virtual DanhMuc MaDanhMucNavigation { get; set; }
         public virtual ICollection<BinhLuan> BinhLuans { get; set; }

@@ -18,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WebBanHang.Models;
 using WebBanHang.Models.Pagination;
+using WebBanHang.Services.UserService;
 
 namespace WebBanHang.Controllers
 {
@@ -26,13 +27,11 @@ namespace WebBanHang.Controllers
     [ApiController]
     public class KhachHangController : ControllerBase
     {
-        private readonly WebBanHangContext _context;
-        public IConfiguration _configuration;
-
-        public KhachHangController(WebBanHangContext context, IConfiguration configuration)
+        private readonly IUserService _userservice;
+        
+        public KhachHangController(IUserService userservice)
         {
-            _context = context;
-            _configuration = configuration;
+            _userservice = userservice;
         }
 
         // GET: lấy danh sách khach hàng - api/KhachHang/GetAllCustoms
@@ -40,7 +39,7 @@ namespace WebBanHang.Controllers
         [HttpGet("GetAllCustomors")]
         public async Task<ActionResult<IEnumerable<KhachHang>>> GetAllCustomors()
         {
-            return await _context.KhachHangs.ToListAsync();
+            return await _userservice.GetAllCustomors();
         }
 
         // GET: Lấy thông tin chi tiết khách hàng theo id -  api/KhachHang/GetCustomorDetail/5
@@ -48,11 +47,7 @@ namespace WebBanHang.Controllers
         public async Task<ActionResult<KhachHang>> GetCustomorDetail(int id)
         {
             //Eager Loading
-            var khachHang = await _context.KhachHangs
-                                          .Include(kHang => kHang.BinhLuans)
-                                          .Include(kHang => kHang.HoaDons)
-                                          .Where(kHang => kHang.MaKhachHang == id)
-                                          .FirstOrDefaultAsync();
+            var khachHang = await _userservice.GetCustomorDetail(id);
 
             if (khachHang == null)
             {
@@ -66,10 +61,7 @@ namespace WebBanHang.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<KhachHang>>> GetCustomor(string tenDangNhap)
         {
-            var TenDangNhapParam = new SqlParameter("@TenDangNhap", tenDangNhap);
-
-            var account = await _context.KhachHangs.FromSqlRaw("SELECT * FROM[dbo].[F_GetAccount](@TenDangNhap)",
-                TenDangNhapParam).ToListAsync();
+            var account = await _userservice.GetCustomor(tenDangNhap);
             
             if (account == null)
             {
@@ -85,22 +77,7 @@ namespace WebBanHang.Controllers
         [HttpGet("GetCustomorsPagining")]
         public async Task<IActionResult> GetCustomorsPagining([FromQuery] PaginationFilter filter)
         {
-            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-            
-            // lấy data từ bảng KhachHang
-            var pagedData = await _context.KhachHangs
-               .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
-               .Take(validFilter.PageSize)
-               .ToListAsync();
-
-            // tổng số phần tử
-            var totalRecords = await _context.KhachHangs.CountAsync();
-
-            // tổng số trang
-            var totalPages = ((double)totalRecords / (double)validFilter.PageSize);
-            int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
-
-            var pageRespone = new PagedResponse<List<KhachHang>>(pagedData, validFilter.PageNumber, validFilter.PageSize, totalRecords, roundedTotalPages);
+            var pageRespone = await _userservice.GetCustomorsPagining(filter);
 
             return Ok(pageRespone);
         }
@@ -109,15 +86,7 @@ namespace WebBanHang.Controllers
         [HttpGet("SearchCustomorsByName")]
         public async Task<IEnumerable<KhachHang>> SearchCustomorsByName(string searchString)
         {
-            IQueryable<KhachHang> khachHang = _context.KhachHangs;
-
-            if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                khachHang = khachHang.Where(kHang => kHang.TenDangNhap.Contains(searchString));
-            }
-            
-
-            return await khachHang.ToListAsync();
+            return await _userservice.SearchCustomorsByName(searchString);
         }
 
 
@@ -125,11 +94,7 @@ namespace WebBanHang.Controllers
         [HttpPost("AddCustomor")]
         public async Task<ActionResult<KhachHang>> AddCustomor(KhachHang insert)
         {
-            var TenParam = new SqlParameter("@Ten", insert.Ten);
-            var TenDangNhapParam = new SqlParameter("@TenDangNhap", insert.TenDangNhap);
-            var MatKhauParam = new SqlParameter("@MatKhau", insert.MatKhau);
-
-            var khachHang = await _context.KhachHangs.FirstOrDefaultAsync(c => c.TenDangNhap == insert.TenDangNhap);
+            var khachHang = await _userservice.CheckAcountExist(insert);
 
             if (khachHang != null)
             {
@@ -137,7 +102,7 @@ namespace WebBanHang.Controllers
             }
             else
             {
-                await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertKH @Ten, @TenDangNhap, @MatKhau", TenParam, TenDangNhapParam, MatKhauParam);
+                await _userservice.AddCustomor(insert);
                 
                 return Ok("add success"); 
             } 
@@ -148,9 +113,7 @@ namespace WebBanHang.Controllers
         [HttpDelete("DeleteCustomor/{id}")]
         public async Task<ActionResult> DeleteCustomor(int id)
         {
-            var IdParam = new SqlParameter("@MaKhachHang", id);
-
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_DeleteKH @MaKhachHang", IdParam);
+            await _userservice.DeleteCustomor(id);
 
             return Ok("Delete success!");
         }
@@ -159,36 +122,19 @@ namespace WebBanHang.Controllers
         [HttpPut("UpdateCustomor/{id}")]
         public async Task<ActionResult> UpdateCustomor(int id, KhachHang updateData)
         {
-            var IdParam = new SqlParameter("@MaKhachHang", id);
-            var TenParam = new SqlParameter("@Ten", updateData.Ten);
-            var TenDangNhapParam = new SqlParameter("@TenDangNhap", updateData.TenDangNhap);
-            var MatKhauParam = new SqlParameter("@MatKhau", updateData.MatKhau);
-            var AnhDaiDienParam = new SqlParameter("@AnhDaiDien", updateData.AnhDaiDien);
-            var EmailParam = new SqlParameter("@Email", updateData.Email);
-            var DiaChiParam = new SqlParameter("@DiaChi", updateData.DiaChi);
-            var SDTParam = new SqlParameter("@SDT", updateData.Sdt);
-
-
-            if (await _context.KhachHangs.FirstOrDefaultAsync(c => c.TenDangNhap == updateData.TenDangNhap) != null)
+            if (await _userservice.CheckAcountExistDiffId(id,updateData))
             {
-                if (await _context.KhachHangs.FirstOrDefaultAsync(c => c.TenDangNhap == updateData.TenDangNhap && c.MaKhachHang == id) == null)
-                {
-                    return BadRequest("Username was Existed!");
-                }
+                return BadRequest("Account was existed!");
                 
             }
             
-            if(await _context.KhachHangs.FirstOrDefaultAsync(c => c.Email == updateData.Email) != null)
+            if(await _userservice.CheckEmailExist(id, updateData))
             {
-                if (await _context.KhachHangs.FirstOrDefaultAsync(c => c.Email == updateData.Email && c.MaKhachHang == id) == null)
-                {
-                    return BadRequest("Email was Existed!");
-                }
+                return BadRequest("Email was Existed!");
             }
 
 
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_UpdateKH @MaKhachHang, @TenDangNhap, @MatKhau, @AnhDaiDien, @Email, @Ten, @DiaChi, @SDT",
-                    IdParam, TenDangNhapParam, MatKhauParam, AnhDaiDienParam, EmailParam, TenParam, DiaChiParam, SDTParam);
+            await _userservice.UpdateCustomor(id, updateData);
             return Ok("Update success!");
 
 
@@ -200,31 +146,13 @@ namespace WebBanHang.Controllers
         {
             if (userData != null && userData.TenDangNhap != null && userData.MatKhau != null)
             {
-                var user = await _context.KhachHangs.FirstOrDefaultAsync(c => c.TenDangNhap == userData.TenDangNhap && c.MatKhau == userData.MatKhau);
-                if (user != null)
+                var userToken = await _userservice.GetCustomorLoginToken(userData);
+                if (userToken != null)
                 {
-                    // Add CLaims
-                    var claims = new[]
-                    {
-                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["JwtSettings:Subject"]),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("TenDangNhap", user.TenDangNhap),
-                        new Claim("MatKhau", user.MatKhau),
-                    };
-
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]));
-
-                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
-                    var tokenString = new JwtSecurityToken(_configuration["JwtSettings:Issuer"], _configuration["JwtSettings:Audience"], claims, expires: DateTime.UtcNow.AddDays(3), signingCredentials: signIn);
-
-                    var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenString);
-
                     return Ok(new { 
-                        id = user.MaKhachHang,
-                        account = user.TenDangNhap,
-                        token = accessToken
+                        id = userData.MaKhachHang,
+                        account = userData.TenDangNhap,
+                        token = userToken
                     });
                 }
                 else
@@ -246,34 +174,15 @@ namespace WebBanHang.Controllers
         {
             if (userData != null && userData.TenDangNhap != null && userData.MatKhau != null)
             {
-                var user = await _context.KhachHangs.FirstOrDefaultAsync(c => c.TenDangNhap == userData.TenDangNhap && c.MatKhau == userData.MatKhau);
-                if (user != null && user.IsAdmin == true)
+                var adminToken = await _userservice.GetAdminLoginToken(userData);
+                if (adminToken != null)
                 {
-                    // Add CLaims
-                    var claims = new[]
-                    {
-                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["JwtSettings:Subject"]),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("TenDangNhap", user.TenDangNhap),
-                        new Claim("MatKhau", user.MatKhau),
-                        new Claim("role", "Admin"),
-                    };
-
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]));
-
-                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                    var tokenString = new JwtSecurityToken(_configuration["JwtSettings:Issuer"], _configuration["JwtSettings:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: signIn);
-
-                    var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenString);
-
                     return Ok(new
                     {
-                        id = user.MaKhachHang,
-                        account = user.TenDangNhap,
+                        id = userData.MaKhachHang,
+                        account = userData.TenDangNhap,
                         role = "Admin",
-                        token = accessToken
+                        token = adminToken
                     });
                 }
                 else
@@ -292,15 +201,13 @@ namespace WebBanHang.Controllers
         [HttpPut("SetAdmin")]
         public async Task<ActionResult> SetAdmin(int maKhachHang)
         {
-            var MaKhachHangParam = new SqlParameter("@MaKhachHang", maKhachHang);
-
-            if (await _context.KhachHangs.FirstOrDefaultAsync(c => c.MaKhachHang == maKhachHang) == null)
+            if (await _userservice.CheckIdExist(maKhachHang) == null)
             {
                 return BadRequest("MaKhachHang is Invail.");
             }
             else
             {
-                await _context.Database.ExecuteSqlRawAsync("exec Sp_SetAD @MaKhachHang", MaKhachHangParam);
+                await _userservice.SetAdminRole(maKhachHang);
                 return Ok("Set Admin Success.");
             }
 

@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Models;
 using WebBanHang.Models.Pagination;
+using WebBanHang.Services.BillService;
 
 namespace WebBanHang.Controllers
 {
@@ -15,25 +16,25 @@ namespace WebBanHang.Controllers
     [ApiController]
     public class HoaDonController : ControllerBase
     {
-        private readonly WebBanHangContext _context;
+        private readonly IBillService _billservice;
 
-        public HoaDonController(WebBanHangContext context)
+        public HoaDonController(IBillService billservice)
         {
-            _context = context;
+            _billservice = billservice;
         }
 
         // GET: api/HoaDon
         [HttpGet("GetAllBills")]
         public async Task<ActionResult<IEnumerable<HoaDon>>> GetAllBills()
         {
-            return await _context.HoaDons.FromSqlRaw("SELECT * FROM[dbo].[F_SelectHD]()").ToListAsync();
+            return await _billservice.GetAllBills();
         }
 
         // GET: api/HoaDon/5
         [HttpGet("GetBillById/{id}")]
         public async Task<ActionResult<HoaDon>> GetBillById(int id)
         {
-            var hoaDon = await _context.HoaDons.FindAsync(id);
+            var hoaDon = await _billservice.GetBillById(id);
 
             if (hoaDon == null)
             {
@@ -52,11 +53,7 @@ namespace WebBanHang.Controllers
             //                              .Include(HD => HD.ChiTietHoaDons)
             //                              .Where(HD => HD.MaHoaDon == id)
             //                              .FirstOrDefaultAsync();
-            var MaKhachHangParam = new SqlParameter("@MaKhachHang", id);
-
-            var hoaDon = await _context.HoaDons.FromSqlRaw("SELECT * FROM[dbo].[F_GetBill](@MaKhachHang)",
-                    MaKhachHangParam).ToListAsync();
-
+            var hoaDon = await _billservice.GetBillDetail(id);
             if (hoaDon == null)
             {
                 return NotFound("Custom Not Found!");
@@ -70,22 +67,7 @@ namespace WebBanHang.Controllers
         [HttpGet("GetBillPaging")]
         public async Task<IActionResult> GetBillPaging([FromQuery] PaginationFilter filter)
         {
-            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-
-            // lấy data từ bảng HoaDon
-            var pagedData = await _context.HoaDons
-               .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
-               .Take(validFilter.PageSize)
-               .ToListAsync();
-
-            // tổng số phần tử
-            var totalRecords = await _context.HoaDons.CountAsync();
-
-            // tổng số trang
-            var totalPages = ((double)totalRecords / (double)validFilter.PageSize);
-            int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
-
-            var pageRespone = new PagedResponse<List<HoaDon>>(pagedData, validFilter.PageNumber, validFilter.PageSize, totalRecords, roundedTotalPages);
+            var pageRespone = await _billservice.GetBillPaging(filter);
 
             return Ok(pageRespone);
         }
@@ -95,11 +77,7 @@ namespace WebBanHang.Controllers
         [HttpPost("AddBill")]
         public async Task<ActionResult<HoaDon>> AddBill(HoaDon insert)
         {
-            var MaKhachHangParam = new SqlParameter("@MaKhachHang", insert.MaKhachHang);
-            var TongTienParam = new SqlParameter("@TongTien", insert.TongTien);
-
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertHD @MaKhachHang, @TongTien",
-                    MaKhachHangParam, TongTienParam);
+            await _billservice.AddBill(insert);
 
             return Ok("add success");
 
@@ -117,8 +95,7 @@ namespace WebBanHang.Controllers
 
             //return Ok("add success");
 
-            _context.HoaDons.Add(insert);
-            await _context.SaveChangesAsync();
+            await _billservice.CheckOutOrder(insert);
 
             return Ok("CheckOut Success.");
 
@@ -128,12 +105,9 @@ namespace WebBanHang.Controllers
         [HttpDelete("DeleteBill/{id}")]
         public async Task<ActionResult> DeleteBill(int id)
         {
-            var IdParam = new SqlParameter("@MaHoaDon", id);
-
-            if (await _context.HoaDons.FirstOrDefaultAsync(b => b.MaHoaDon == id) != null)
+            if (await _billservice.CheckMaHoaDon(id))
             {
-                await _context.Database.ExecuteSqlRawAsync("exec Sp_DeleteHD @MaHoaDon", IdParam);
-
+                await _billservice.DeleteBill(id);
                 return Ok("Delete success!");
             }
             else
@@ -147,11 +121,9 @@ namespace WebBanHang.Controllers
         [HttpPut("PutConfirmReceived/{id}")]
         public async Task<ActionResult> PutConfirmReceived(int id)
         {
-            var MaHoaDonParam = new SqlParameter("@MaHoaDon", id);
-
-            if (await _context.HoaDons.FirstOrDefaultAsync(b => b.MaHoaDon == id) != null)
+            if (await _billservice.CheckMaHoaDon(id))
             {
-                await _context.Database.ExecuteSqlRawAsync("exec Sp_CusConfir3 @MaHoaDon", MaHoaDonParam);
+                await _billservice.PutConfirmReceived(id);
                 return Ok("Confirm success!");
             }
             else
@@ -165,11 +137,9 @@ namespace WebBanHang.Controllers
         [HttpPut("PutConfirmCanceled/{id}")]
         public async Task<ActionResult> PutConfirmCanceled(int id)
         {
-            var MaHoaDonParam = new SqlParameter("@MaHoaDon", id);
-
-            if (await _context.HoaDons.FirstOrDefaultAsync(b => b.MaHoaDon == id) != null)
+            if (await _billservice.CheckMaHoaDon(id))
             {
-                await _context.Database.ExecuteSqlRawAsync("exec Sp_CusConfir4 @MaHoaDon", MaHoaDonParam);
+                await _billservice.PutConfirmCanceled(id);
 
                 return Ok("Confirm success!");
             }
@@ -184,11 +154,9 @@ namespace WebBanHang.Controllers
         [HttpPut("PutAdConfirm/{id}")]
         public async Task<ActionResult> PutAdConfirm(int id)
         {
-            var MaHoaDonParam = new SqlParameter("@MaHoaDon", id);
-
-            if (await _context.HoaDons.FirstOrDefaultAsync(b => b.MaHoaDon == id) != null)
+            if (await _billservice.CheckMaHoaDon(id))
             {
-                await _context.Database.ExecuteSqlRawAsync("exec Sp_AdConfir @MaHoaDon", MaHoaDonParam);
+                await _billservice.PutAdConfirm(id);
 
                 return Ok("Confirm success!");
             }
@@ -209,20 +177,7 @@ namespace WebBanHang.Controllers
             }
             else
             {
-                switch (status) 
-                {
-                    case 1:
-                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD1]()").ToListAsync();                       
-                    case 2:
-                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD2]()").ToListAsync();
-                    case 3:
-                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD3]()").ToListAsync();
-                    case 4:
-                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD4]()").ToListAsync();
-                    default:
-                        return await _context.HoaDons.FromSqlRaw("SELECT * FROM [dbo].[F_SelectHD1]()").ToListAsync();
-
-                }
+                return await _billservice.GetBillByStatus(status);
             }
             
         }

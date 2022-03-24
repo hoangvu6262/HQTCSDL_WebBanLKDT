@@ -14,6 +14,7 @@ namespace WebBanHang.Models
 
         public int MaDanhMuc { get; set; }
         public string TenDanhMuc { get; set; }
+        public string IconDanhMuc { get; set; }
 
         public virtual ICollection<SanPham> SanPhams { get; set; }
     }

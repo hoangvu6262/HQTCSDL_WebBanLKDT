@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Models;
+using WebBanHang.Services.CategoriesService;
 
 namespace WebBanHang.Controllers
 {
@@ -14,25 +15,25 @@ namespace WebBanHang.Controllers
     [ApiController]
     public class DanhMucController : ControllerBase
     {
-        private readonly WebBanHangContext _context;
+        private readonly ICategoriesService _repository;
 
-        public DanhMucController(WebBanHangContext context)
+        public DanhMucController(ICategoriesService repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/DanhMuc/GetAllCategories
         [HttpGet("GetAllCategories")]
         public async Task<ActionResult<IEnumerable<DanhMuc>>> GetAllCategories()
         {
-            return await _context.DanhMucs.FromSqlRaw("SELECT * FROM [dbo].[F_SelectDM]()").ToListAsync();
+            return await _repository.GetAllCategories();
         }
 
         // GET: api/DanhMuc/5
         [HttpGet("GetCategoryById/{id}")]
         public async Task<ActionResult<DanhMuc>> GetCategoryById(int id)
-        {
-            var danhMuc = await _context.DanhMucs.FindAsync(id);
+        { 
+            var danhMuc = await _repository.GetCategoryById(id);
 
             if (danhMuc == null)
             {
@@ -48,10 +49,7 @@ namespace WebBanHang.Controllers
         public async Task<ActionResult<DanhMuc>> GetCategoryDetailById(int id)
         {
             //Eager Loading
-            var danhMuc = await _context.DanhMucs
-                                          .Include(DM => DM.SanPhams)
-                                          .Where(DM => DM.MaDanhMuc == id)
-                                          .FirstOrDefaultAsync();
+            var danhMuc = await _repository.GetCategoryDetailById(id);
 
             if (danhMuc == null)
             {
@@ -65,10 +63,7 @@ namespace WebBanHang.Controllers
         [HttpPost("AddCategory")]
         public async Task<ActionResult<DanhMuc>> AddCategory(DanhMuc insert)
         {
-            var TenDMParam = new SqlParameter("@TenDanhMuc", insert.TenDanhMuc);
-
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertDM @TenDanhMuc",
-                    TenDMParam);
+            await _repository.AddCategory(insert);
 
             return Ok("add category success");
 
@@ -78,9 +73,7 @@ namespace WebBanHang.Controllers
         [HttpDelete("DeleteCategory/{id}")]
         public async Task<ActionResult> DeleteCategory(int id)
         {
-            var IdParam = new SqlParameter("@MaDanhMuc", id);
-
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_DeleteDM @MaDanhMuc", IdParam);
+            await _repository.DeleteCategory(id);
 
             return Ok("Delete category success!");
         }
@@ -89,21 +82,16 @@ namespace WebBanHang.Controllers
         [HttpPut("UpdateCategory/{id}")]
         public async Task<ActionResult> UpdateCategory(int id, DanhMuc updateData)
         {
-            var IdParam = new SqlParameter("@MaDanhMuc", id);
-            var TenDMParam = new SqlParameter("@TenDanhMuc", updateData.TenDanhMuc);
+            // check category exist
+            var checkCategoryExist = _repository.CategoryExist(id, updateData);
 
-
-            if (await _context.DanhMucs.FirstOrDefaultAsync(d => d.TenDanhMuc == updateData.TenDanhMuc) != null)
+            if (checkCategoryExist)
             {
-                if (await _context.DanhMucs.FirstOrDefaultAsync(d => d.TenDanhMuc == updateData.TenDanhMuc && d.MaDanhMuc == id) == null)
-                {
-                    return BadRequest("Category was Existed!");
-                }
+                await _repository.UpdateCategory(id, updateData);
+                return Ok("update category success!");
 
             }
-
-            await _context.Database.ExecuteSqlRawAsync("exec Sp_UpdateDM @MaDanhMuc, @TenDanhMuc", IdParam, TenDMParam);
-            return Ok("update category success!");
+            return BadRequest("Category was Exist!");
         }
 
     }

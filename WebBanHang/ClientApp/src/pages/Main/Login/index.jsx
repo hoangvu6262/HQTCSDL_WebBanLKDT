@@ -6,12 +6,13 @@ import {
 import Notification from "../../../components/Notification";
 import { makeStyles } from "@mui/styles";
 import LoginForm from "../../../components/LoginForm"
+import loginWallpaper from "../../../assets/img/loginWallpaper.jpg"
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundImage:
-            "linear-gradient(rgba(0, 0, 0, 0.4),rgba(0, 0, 0, 0.6)),url(https://demos.creative-tim.com/material-dashboard-pro-react/static/media/login.c8a507cf.jpeg)",
+            `linear-gradient(rgba(0, 0, 0, 0.4),rgba(0, 0, 0, 0.6)),url(${loginWallpaper})`,
         width: "100vw",
         height: "102.5vh",
         //paddingBottom: 180,
