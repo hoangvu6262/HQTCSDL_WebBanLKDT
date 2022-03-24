@@ -44,7 +44,7 @@ export default function Search(props) {
         placeholder={label}
         name={name}
         InputProps={{
-          startAdornment: (
+          endAdornment: (
             <InputAdornment position="start">
               <SearchIcon className={classes.searchIcon} />
             </InputAdornment>

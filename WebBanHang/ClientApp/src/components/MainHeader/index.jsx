@@ -17,7 +17,8 @@ import {
     MenuItem,
     ListItemText,
     ListItemIcon,
-    Hidden
+    Hidden,
+    Container
 } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -32,6 +33,7 @@ import action from "../../redux/actions/action"
 
 
 const CustomAppBar = styled(AppBar)({
+    
     color: "#000 !important",
     backgroundColor: "#fff !important",
 })
@@ -120,6 +122,13 @@ const CustomMenuItem = styled(MenuItem)({
     }
 })
 
+const CustomContainer = styled(Container)({
+    padding: "0 5px !important",
+    "&.MuiContainer-maxWidthXl": {
+        maxWidth: 1310,
+    }
+})
+
 const MainHeader =() =>{
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -182,63 +191,66 @@ const MainHeader =() =>{
     return (
         <Box sx={{ flexGrow: 1 }}>
             <CustomAppBar>
-                <Toolbar>
-                    <Hidden mdUp>
-                        <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            sx={{ mr: 2 }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                    </Hidden>
-                    
-                    <Link to="/">
-                        <img src="https://theme.hstatic.net/1000026716/1000440777/14/logo.svg?v=22841" alt="logo" width="150"/>
-                    </Link>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </Search>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'flex' } }}>
+                <CustomContainer maxWidth="xl">
+                    <Toolbar>
+                        <Hidden mdUp>
+                            <IconButton
+                                size="large"
+                                edge="start"
+                                color="inherit"
+                                aria-label="open drawer"
+                                sx={{ mr: 2 }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        </Hidden>
 
-                        {isCustomorLogin ? (
-                            <div>
-                                <AccountButton aria-describedby={id} type="button" onClick={handleClick}>
-                                    {customor.account}
-                                </AccountButton>
-                                <AccountPopper id={id} open={open} anchorEl={anchorEl} transition disablePortal>
-                                    {({ TransitionProps }) => (
-                                        <Fade {...TransitionProps} timeout={350}>
-                                            <AccToggle>
-                                                {AccMenu()}
-                                             </AccToggle>
-                                        </Fade>
-                                    )}
-                                </AccountPopper>
-                            </div>
-                        ) : <Box>
+                        <Link to="/">
+                            <img src="https://theme.hstatic.net/1000026716/1000440777/14/logo.svg?v=22841" alt="logo" width="150" />
+                        </Link>
+                        <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon />
+                            </SearchIconWrapper>
+                            <StyledInputBase
+                                placeholder="Search…"
+                                inputProps={{ 'aria-label': 'search' }}
+                            />
+                        </Search>
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Box sx={{ display: { xs: 'flex' } }}>
+
+                            {isCustomorLogin ? (
+                                <div>
+                                    <AccountButton aria-describedby={id} type="button" onClick={handleClick}>
+                                        {customor.account}
+                                    </AccountButton>
+                                    <AccountPopper id={id} open={open} anchorEl={anchorEl} transition disablePortal>
+                                        {({ TransitionProps }) => (
+                                            <Fade {...TransitionProps} timeout={350}>
+                                                <AccToggle>
+                                                    {AccMenu()}
+                                                </AccToggle>
+                                            </Fade>
+                                        )}
+                                    </AccountPopper>
+                                </div>
+                            ) : <Box>
                                 <AccountButton component={Link} to="/login">Sign In</AccountButton>
                                 <AccountButton component={Link} to="/register">Register</AccountButton>
-                        </Box>}
+                            </Box>}
 
-                        {location.pathname === "/cart" ? null : (
-                            <CustomIconButton component={Link} to="/cart" size="large" aria-label="show 4 new mails" color="inherit">
-                                <Badge badgeContent={cart.quantity} color="error">
-                                    <ShoppingBasketOutlinedIcon />
-                                </Badge>
-                            </CustomIconButton>
-                        )}
-                    </Box>
-                </Toolbar>
+                            {location.pathname === "/cart" ? null : (
+                                <CustomIconButton component={Link} to="/cart" size="large" aria-label="show 4 new mails" color="inherit">
+                                    <Badge badgeContent={cart.quantity} color="error">
+                                        <ShoppingBasketOutlinedIcon />
+                                    </Badge>
+                                </CustomIconButton>
+                            )}
+                        </Box>
+                    </Toolbar>
+                </CustomContainer>
+                
             </CustomAppBar>
         </Box>
     );

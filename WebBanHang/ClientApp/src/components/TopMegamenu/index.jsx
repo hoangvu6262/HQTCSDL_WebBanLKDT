@@ -55,8 +55,8 @@ const TopMegaMenu = () => {
                 </Paper>
             </Grid>
             {TopMegaMenuList.map((item) => (
-                <Grid item md={2}>
-                    <Paper elevation={0} key={item.id} className={classes.topMenu}>
+                <Grid item md={2} key={item.id}>
+                    <Paper elevation={0}  className={classes.topMenu}>
                         <img src={item.icon} alt="" />
                         <Typography variant="subtitle2" component="subtitle2" className={classes.title}>{item.name}</Typography>
                     </Paper>

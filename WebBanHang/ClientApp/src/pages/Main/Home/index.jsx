@@ -19,20 +19,17 @@ import TopMegaMenu from "../../../components/TopMegamenu"
 
 const useStyles = makeStyles({
     newProduct: {
-        padding: "20px 0 !important",
+        padding: "20px 5px !important",
     },
     newProductTitle: {
-        margin: "20px 0 !important",
-        padding: "15px 0 !important",
-        //backgroundColor: "green",
-        "& h2": {
-            fontFamily: "'Urbanist', sans- serif",
-            fontWeight: "600 !important"
-        },
+        textTransform: "uppercase",
+        padding: "0 !important",
+        fontSize: "22px !important",
+        color: "#fff !important"
 
     },
     productCard: {
-        padding: "15px",
+        padding: "2px",
     },
     megeMenuContainer: {
         paddingBottom: 7,
@@ -40,15 +37,16 @@ const useStyles = makeStyles({
         backgroundColor: "#f1f0f1"
     },
     viewAll: {
-        paddingRight: 15,
+        backgroundColor: "#d7202c",
+        margin: "0px 15px",
+        padding: "0px 20px",
         display: "flex",
-        justifyContent: "flex-end"
+        justifyContent: "space-between",
     },
     viewAllButton: {
-        border: "2px solid #000 !important",
         fontSize: "15px !important",
-        color: "#000 !important",
-        padding: "10px 15px !important",
+        color: "#fff !important",
+        padding: "0px 15px !important",
         fontFamily: "'Urbanist', sans- serif !important",
         borderRadius: "0 !important",
     },
@@ -80,7 +78,7 @@ const Home = () => {
 
     useEffect(() => {
         dispatch(GetListCategory())
-        dispatch(GetAllProductPaging(1, 8));
+        dispatch(GetAllProductPaging(1, 6));
         dispatch(GetNewsList())
     }, []);
 
@@ -136,16 +134,14 @@ const Home = () => {
 
                 </Grid>
             </Container>
-            <Container maxWidth="lg">
-                <div className={classes.newProductTitle}>
-                    <Typography variant="h2" align="center" gutterBottom >New Products</Typography>
-                </div>
+            <Container maxWidth="xl" className={classes.megaMenu}>
                 <Grid container className={classes.newProduct}>
-                    <Grid item xs={12} className={ classes.viewAll}>
-                        <Button component={Link} to="/listproducts" className={classes.viewAllButton}>View all</Button>
+                    <Grid item xs={12} className={classes.viewAll}>
+                        <Typography variant="h6" component="h6" align="center" className={classes.newProductTitle}>Sản phẩm mới - Miễn phí giao hàng</Typography>
+                        <Button component={Link} to="/listproducts" className={classes.viewAllButton}>Xem tất cả</Button>
                     </Grid>
                     {listProductsPaging.map((item) => (
-                        <Grid item md={3} sm={6} xs={12}
+                        <Grid item md={2} sm={6} xs={12}
                             className={classes.productCard}
                             key={item.maSp}
                         >
@@ -154,16 +150,17 @@ const Home = () => {
                     ))}
                 </Grid>
             </Container>
-            <Container maxWidth="lg">
+            <Container maxWidth="xl" className={classes.megaMenu}>
                 <div className={classes.newProductTitle}>
-                    <Typography variant="h2" align="center" gutterBottom >News</Typography>
+                    
                 </div>
                 <Grid container className={classes.newProduct}>
                     <Grid item xs={12} className={classes.viewAll}>
+                        <Typography variant="h6" component="h6" align="center" className={classes.newProductTitle}>News</Typography>
                         <Button component={Link} to="/#" className={classes.viewAllButton}>View all</Button>
                     </Grid>
                     {listNews.map((item) => (
-                        <Grid item md={3} sm={6} xs={12}
+                        <Grid item md={2} sm={6} xs={12}
                             className={classes.productCard}
                             key={item.maTinTuc}
                         >

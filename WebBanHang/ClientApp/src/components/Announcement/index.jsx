@@ -8,7 +8,7 @@ const Container = styled('div')({
     width: "100%",
     padding: 5,
     fontFamily: "'Urbanist', sans- serif !important",
-    backgroundColor: "#008b6b",
+    backgroundColor: "#aeb4ff",
     "& p": {
         margin: 0,
         color: "#fff",

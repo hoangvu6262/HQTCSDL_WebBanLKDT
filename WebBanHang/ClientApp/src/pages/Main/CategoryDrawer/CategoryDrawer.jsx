@@ -5,8 +5,8 @@ import { styled, makeStyles } from "@mui/styles"
 
 const CustomContainer = styled('div')({
     height: "100%",
-    borderRadius: "5px",
-    border: "1px solid #ddcece",
+    borderRadius: "7px",
+    //border: "1px solid #ddcece",
     //backgroundColor: "#fff5f8",
     "& h4": {
         fontFamily: "'Urbanist', sans- serif !important",
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
         color: "#505050  !important",
         border: "1px solid #505050",
         "& img": {
-            marginRight: 11,
+            marginRight: 15,
             width: 17,
             height: 17
         },
@@ -42,9 +42,10 @@ const useStyles = makeStyles({
 
     },
     title: {
+        fontFamily: "'Urbanist', sans- serif !important",
         //textTransform: "uppercase !important",
-        fontSize: "17px !important",
-        fontWeight: "600 !important"
+        fontSize: "15px !important",
+        fontWeight: "500 !important"
     }
 })
 
@@ -57,15 +58,13 @@ function CategoryDrawer(props) {
             <MenuList>
                 <MenuItem component={Link} to="/listproducts" className={classes.categoryItem}>
                     <img src="https://theme.hstatic.net/1000026716/1000440777/14/xxx21.png?v=24652" alt="" />
-                    <Typography variant="subtitle2" component="subtitle2" className={classes.title}>Laptop</Typography>
-                </MenuItem>
-                <MenuItem component={Link} to="/listproducts">
-                    <AccToggleText>All</AccToggleText>
+                    <Typography variant="subtitle2" component="subtitle2" className={classes.title}>All</Typography>
                 </MenuItem>
                 {listCategory.map((category) => {
                     return (
-                        <MenuItem key={category.maDanhMuc} component={Link} to={`/list-products&categoryid=${category.maDanhMuc}`}>
-                            <AccToggleText>{category.tenDanhMuc}</AccToggleText>
+                        <MenuItem key={category.maDanhMuc} component={Link} to={`/list-products&categoryid=${category.maDanhMuc}`} className={classes.categoryItem}>
+                            <img src={category.iconDanhMuc } alt="" />
+                            <Typography variant="subtitle2" component="subtitle2" className={classes.title}>{category.tenDanhMuc}</Typography>
                         </MenuItem>
                     )
                 })}
