@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
     Container,
 } from "@mui/material";
@@ -59,18 +59,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomLoginPage(props) {
     const classes = useStyles();
-    const dispatch = useDispatch();
 
     const { notification } = useSelector((state) => state.user);
 
-    const handleCloseNotification = () => {
-        dispatch({
-            type: "CLOSE_NOTIFICATION",
-            payload: false,
-        });
-    };
+    
     return (
-        <div className={classes.root}>
+        <div className={classes.root}>  
             <Container maxWidth="md" className={classes.loginPageContent}>
                 <div className={classes.formLogin}>
                     <div className={classes.logo}>
@@ -80,7 +74,7 @@ export default function CustomLoginPage(props) {
                 </div>
             </Container>
 
-            <Notification notifyAlert={notification} onClose={handleCloseNotification} />
+            <Notification notifyAlert={notification}/>
         </div>
     );
 }

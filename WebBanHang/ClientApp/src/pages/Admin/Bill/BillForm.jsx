@@ -103,7 +103,7 @@ export default function BillForm(props) {
             >
                 {(formik) => (
                     <form
-                        enableReinitialize
+                        //enablereinitialize
                         onSubmit={formik.handleSubmit}
                         //className={classes.formLogin}
                         autoComplete="off"

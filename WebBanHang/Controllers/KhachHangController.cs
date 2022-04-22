@@ -149,9 +149,11 @@ namespace WebBanHang.Controllers
                 var userToken = await _userservice.GetCustomorLoginToken(userData);
                 if (userToken != null)
                 {
+                    var user = _userservice.CheckAccPass(userData);
+
                     return Ok(new { 
-                        id = userData.MaKhachHang,
-                        account = userData.TenDangNhap,
+                        id = user.Result.MaKhachHang,
+                        account= user.Result.TenDangNhap,
                         token = userToken
                     });
                 }

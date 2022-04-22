@@ -35,7 +35,7 @@ namespace WebBanHang.Services.UserService
         Task<int> UpdateCustomor(int id, KhachHang updateData);
 
         // get customor login token
-        Task<string> GetCustomorLoginToken(KhachHang userData);
+        Task<object> GetCustomorLoginToken(KhachHang userData);
 
         // get admin login token
         Task<string> GetAdminLoginToken(KhachHang userData);
@@ -56,6 +56,7 @@ namespace WebBanHang.Services.UserService
         // check id exist
         Task<KhachHang> CheckIdExist(int id);
 
-
+        //check account and password
+        Task<KhachHang> CheckAccPass(KhachHang insert);
     }
 }

@@ -1,13 +1,25 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import MainHeader from "../../components/MainHeader";
+import MainFooter from "../../components/MainFooter"
 import { makeStyles } from "@mui/styles";
-import Announcement from "../../components/Announcement"
 
 const useStyles = makeStyles({
     container: {
-        marginTop: 64,
+        marginTop: 170.86,
     },
+    '@media (max-width: 1200px)': {
+        container: {
+            marginTop: 162.86,
+
+        }
+    },
+    '@media (max-width: 900px)': {
+        container: {
+            marginTop: 107.86,
+
+        }
+    }
 })
 
 
@@ -17,13 +29,11 @@ const MainTemplate = (props) => {
     return (
         <>
             <MainHeader />
-            <div className={classes.container}> 
-                <Announcement />
-            </div>
             
-            <main className={classes.main}>
+            <main className={classes.container}>
                 {props.children}
-            </main>   
+            </main>
+            <MainFooter />
         </>
     );
 };

@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import CartProductCard from "../../../components/Card/CartProductCard";
 import { Grid, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import action from "../../../redux/actions/action";
 import { CheckOut, AddBillDetail } from "../../../redux/actions/bill.action";
 import Notification from "../../../components/Notification"
 
@@ -90,14 +89,6 @@ const Cart = () => {
         
     }
 
-    // close notification
-    const handleCloseNotification = () => {
-        dispatch({
-            type: "CLOSE_NOTIFICATION",
-            payload: false,
-        });
-    };
-
     return (
         <div className={classes.root}>
             <div className={classes.title}>
@@ -138,7 +129,7 @@ const Cart = () => {
                     <Button color="success" variant="contained" fullWidth onClick={ handleCheckout}>Checkout now</Button>
                 </Grid>
             </Grid>
-            <Notification notifyAlert={notification} onClose={handleCloseNotification} />
+            <Notification notifyAlert={notification} />
         </div>
     );
 }

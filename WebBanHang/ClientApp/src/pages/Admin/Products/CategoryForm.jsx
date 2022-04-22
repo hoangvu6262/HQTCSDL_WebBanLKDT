@@ -1,4 +1,4 @@
-﻿import React from "react";
+﻿import React, { useState} from "react";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { Grid, TextField, Button, InputAdornment } from "@mui/material";
@@ -6,7 +6,9 @@ import { makeStyles, withStyles } from "@mui/styles";
 // import { Form } from "../../../components/useForm";
 import { Formik } from "formik";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { AddCategory } from "../../../redux/actions/category.action"
+import { AddCategory } from "../../../redux/actions/category.action";
+
+import PreviewImage from "../../../components/PreviewImage"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,11 +44,20 @@ const CssTextField = withStyles({
 
 const validationSchema = yup.object({
     tenDanhMuc: yup.string("thêm tên danh mục sản phẩm.").required("Vui lòng thêm tên danh mục sản phẩm."),
+    iconDanhMuc: yup.mixed()
+        .nullable()
+        .required()
+        .test(
+            "FILE_SIZE",
+            "Uploaded file is too bid!",
+            (value) => !value || (value && value.size <= 1024 * 1024)
+        ),
 });
 
 
 export default function CategoryForm(props) {
     const { openDialog, setOpenDialog } = props;
+    
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -56,10 +67,12 @@ export default function CategoryForm(props) {
             <Formik
                 initialValues={{
                     tenDanhMuc: "",
+                    iconDanhMuc: null
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
-                    dispatch(AddCategory(values, openDialog, setOpenDialog));
+                    console.log(values);
+                    //dispatch(AddCategory(values, openDialog, setOpenDialog));
                 }}
             >
                 {(formik) => (
@@ -69,7 +82,28 @@ export default function CategoryForm(props) {
                         autoComplete="off"
                     >
                         <Grid container>
-                            <Grid item xs={12} className={classes.root}>
+                            <Grid item xs={12}>
+                                {formik.values.iconDanhMuc && <PreviewImage file={formik.values.iconDanhMuc} />}
+                            </Grid>
+                            <Grid item xs={6} className={classes.root}>
+                                
+                                <CssTextField
+                                    className={classes.formInput}
+                                    fullWidth
+                                    id="iconDanhMuc"
+                                    name="iconDanhMuc"
+                                    type="file"
+                                    
+                                    onChange={(event) => {
+                                        formik.setFieldValue("iconDanhMuc", event.target.files[0]);                                     
+                                    }}
+                                    error={formik.touched.iconDanhMuc && Boolean(formik.errors.iconDanhMuc)}
+                                    helperText={formik.touched.iconDanhMuc && formik.errors.iconDanhMuc}
+                                />
+
+
+                            </Grid>
+                            <Grid item xs={6} className={classes.root}>
                                 <CssTextField
                                     className={classes.formInput}
                                     fullWidth

@@ -36,6 +36,11 @@ namespace WebBanHang.Services.UserService
             return await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertKH @Ten, @TenDangNhap, @MatKhau", TenParam, TenDangNhapParam, MatKhauParam);
         }
 
+        public async Task<KhachHang> CheckAccPass(KhachHang insert)
+        {
+            return await _context.KhachHangs.FirstOrDefaultAsync(c => c.TenDangNhap == insert.TenDangNhap && c.MatKhau == insert.MatKhau);
+        }
+
         // CheckAcountExist
         public async Task<KhachHang> CheckAcountExist(KhachHang insert)
         {
@@ -90,7 +95,7 @@ namespace WebBanHang.Services.UserService
         //GetAdminLoginToken
         public async Task<string> GetAdminLoginToken(KhachHang userData)
         {
-            var user = await _context.KhachHangs.FirstOrDefaultAsync(c => c.TenDangNhap == userData.TenDangNhap && c.MatKhau == userData.MatKhau);
+            var user = await CheckAccPass(userData);
             if (user != null && user.IsAdmin == true)
             {
                 // Add CLaims
@@ -146,9 +151,9 @@ namespace WebBanHang.Services.UserService
 
 
         //GetCustomorLoginToken
-        public async Task<string> GetCustomorLoginToken(KhachHang userData)
+        public async Task<object> GetCustomorLoginToken(KhachHang userData)
         {
-            var user = await _context.KhachHangs.FirstOrDefaultAsync(c => c.TenDangNhap == userData.TenDangNhap && c.MatKhau == userData.MatKhau);
+            var user = await CheckAccPass(userData);
             if (user != null)
             {
                 // Add CLaims
@@ -169,7 +174,7 @@ namespace WebBanHang.Services.UserService
 
                 var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenString);
 
-                return accessToken;
+                return new { accessToken = accessToken, user = user };
             }
             return null;
         }

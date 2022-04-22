@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState} from "react";
-import { Container, Grid, Drawer, Paper } from "@mui/material";
-import { styled, makeStyles } from "@mui/styles";
+import { Container, Grid, Paper } from "@mui/material";
+import { styled } from "@mui/styles";
 import CategoryDrawer from "../CategoryDrawer/CategoryDrawer";
 import { GetListCategory } from "../../../redux/actions/category.action";
 import { GetAllProductPaging, GetProductByCategory } from "../../../redux/actions/product.action"
@@ -11,19 +11,23 @@ import { ADD_TO_CART_SUCCESS } from "../../../redux/constants/product.constant";
 import { useParams } from "react-router-dom";
 
 
+
 const CustomContainer = styled(Container)({
-    paddingTop: 30,
+    paddingTop: 15,
     marginBottom: 30,
     "& h2": {
         fontFamily: "'Urbanist', sans- serif !important",
         textAlign: "center"
+    },
+    "&.MuiContainer-maxWidthXl": {
+        maxWidth: 1310,
     }
 })
 
 const CustomPaper = styled(Paper)({
     padding: 20,
-    borderRadius: "0px !important",
-    border: "2px solid #ddcece",
+    borderRadius: "7px !important",
+    border: "0.5px solid #ddcece",
 })
 
 const ListProducts = () => {
@@ -59,15 +63,13 @@ const ListProducts = () => {
 
     return (
         <>
-            <CustomContainer maxWidth="lg">
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <h2>List Products</h2>
-                    </Grid>
-                    <Grid item md={3}>
+            <CustomContainer maxWidth="xl">
+                <Grid container spacing={1}>
+
+                    <Grid item md={2}>
                         <CategoryDrawer listCategory={listCategory}/>
                     </Grid>
-                    <Grid item md={9} xs={12}>
+                    <Grid item md={10} xs={12}>
                         <CustomPaper>
                             <Grid container spacing={2}>
                                 {listProductsPaging.map((product) => {
