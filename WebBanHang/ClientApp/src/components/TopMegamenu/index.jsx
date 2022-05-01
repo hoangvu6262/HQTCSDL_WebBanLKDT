@@ -3,8 +3,8 @@ import TopMegaMenuList from "./TopMegaMenuList.js";
 import { Grid, Paper, Container, Hidden  } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import { useSelector } from "react-redux";
-import CategoryDrawer from "../../pages/Main/CategoryDrawer/CategoryDrawer";
+//import { useSelector } from "react-redux";
+import CategoryDrawer from "../CategoryDrawer/CategoryDrawer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -103,7 +103,7 @@ const TopMegaMenu = ({ showCategory, show, setShow }) => {
     //const [showCategory, setShowCategory] = useState(false);
     //const [show, setShow] = useState(false);
 
-    const { listCategory } = useSelector(state => state.category);
+    //const { listCategory } = useSelector(state => state.category);
 
  
 
@@ -125,13 +125,14 @@ const TopMegaMenu = ({ showCategory, show, setShow }) => {
                     </Paper>
                 </Grid>               
             ))}
+            
             <div className={showCategory && show ? classes.megeMenuContainer : classes.hide}>
                 <Container maxWidth="xl" className={classes.megaMenu}>
                     <Grid container spacing={1} className={classes.menuContainer}>
 
                         <Grid item md={2} className={classes.categoriesMenuDropdown}>
                             <Paper className={classes.categoriesMenuDropdown} elevation={0}>
-                                <CategoryDrawer listCategory={listCategory} />
+                                <CategoryDrawer />
                             </Paper>
                         </Grid>
 

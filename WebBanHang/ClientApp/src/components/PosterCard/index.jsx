@@ -11,6 +11,12 @@ const useStyle = makeStyles({
     img: {
         maxWidth: "100%",
         maxHeight: "184px",
+    },
+    "@media (max-width: 900px)": {
+        img: {
+            width: "100%",
+            //height: "100%"
+        }
     }
 })
 

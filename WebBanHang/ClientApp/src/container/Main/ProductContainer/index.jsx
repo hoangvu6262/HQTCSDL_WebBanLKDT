@@ -8,9 +8,10 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+
 const useStyles = makeStyles({
     newProduct: {
-        padding: "20px 5px !important",
+        padding: "0px 5px !important",
     },
     newProductTitle: {
         textTransform: "uppercase",
@@ -20,7 +21,7 @@ const useStyles = makeStyles({
 
     },
     productCard: {
-        padding: "2px 2px 40px 2px",
+        padding: "2px 2px 30px 2px",
     },
     viewAll: {
         backgroundColor: "#d7202c",
@@ -60,13 +61,13 @@ const ProductContainer = ({ listProductsPaging, tittle}) => {
     return (
         <>
             <Container maxWidth="xl" className={classes.productContainer}>
-                <Grid container className={classes.newProduct}>
-                    <Grid item xs={12} className={classes.viewAll}>
+                    <div item xs={12} className={classes.viewAll}>
                         <Typography variant="h6" component="h6" align="center" className={classes.newProductTitle}>{tittle} - Miễn phí giao hàng</Typography>
                         <Button component={Link} to="/listproducts" className={classes.viewAllButton} endIcon={<ArrowForwardIosIcon className={ classes.arrowIcon}/>}>Xem tất cả</Button>
-                    </Grid>
+                    </div>
+                <Grid container className={classes.newProduct} columnSpacing={{xs: 1, md:4}}>
                     {listProductsPaging.map((item) => (
-                        <Grid item md={2} sm={4} xs={6}
+                        <Grid item md={2.4} sm={4} xs={6}
                             className={classes.productCard}
                             key={item.maSp}
                         >

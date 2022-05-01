@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import CategoryDrawer from "../../../pages/Main/CategoryDrawer/CategoryDrawer";
+import CategoryDrawer from "../../../components/CategoryDrawer/CategoryDrawer";
 import posterList from "./posterList.js";
 import HomeCarousel from "../../../components/Carousel/HomeCarousel";
 import PosterCard from "../../../components/PosterCard";
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     },
     megaMenu: {
         marginBottom: 5,
-        padding: 10,
+        //padding: 10,
         "&.MuiContainer-maxWidthXl": {
             maxWidth: 1310,
         }
@@ -38,19 +38,21 @@ const MegaMenu = () => {
             <div className={classes.megeMenuContainer}>
                 <Container maxWidth="xl" className={classes.megaMenu}>
                     <Grid container spacing={1} className={classes.menuContainer}>
+                        <Hidden mdDown>
+                            <Grid item md={2}>
+                                <Paper className={classes.categoriesMenu} elevation={0}>
+                                    <CategoryDrawer listCategory={listCategory} />
+                                </Paper>
+                            </Grid>
+                        </Hidden>
                         
-                        <Grid item md={2}>
-                            <Paper className={classes.categoriesMenu} elevation={0}>
-                                <CategoryDrawer listCategory={listCategory} />
-                            </Paper>
-                        </Grid>
                         <Grid item md={10}>
                             <Grid container>
                                 <Grid item lg={8} sm={12}>
                                     <HomeCarousel />
                                     <Grid container>
                                         {posterList.centerPoster.map((item) => (
-                                            <Grid item md={6} key={item.id}>
+                                            <Grid item sm={6} xs={ 12} key={item.id}>
                                                 <PosterCard hef={item.hef} imgSrc={item.imageSrc} />
                                             </Grid>
                                         ))}
@@ -76,7 +78,7 @@ const MegaMenu = () => {
             <Container maxWidth="xl" className={classes.megaMenu}>
                 <Grid container spacing={1}>
                     {posterList.bottomPoster.map((item) => (
-                        <Grid item md={3} key={item.id}>
+                        <Grid item md={3} sm={6} xs={ 12} key={item.id}>
                             <PosterCard hef={item.hef} imgSrc={item.imageSrc} />
                         </Grid>
                     ))}

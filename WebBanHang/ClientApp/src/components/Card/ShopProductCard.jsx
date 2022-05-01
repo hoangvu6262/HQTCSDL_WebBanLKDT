@@ -17,8 +17,7 @@ const ProductImgStyle = styled('img')({
 const useStyles = makeStyles({
     card: {
         borderRadius: "0px !important",
-        border: "1px solid #ddcece",
-        //boxShadow: 'rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px !important',
+        boxShadow: '0 1px 3px rgb(0 0 0 / 30%) !important',
     },
     cardAction: {
         display: "flex",
@@ -38,14 +37,16 @@ const useStyles = makeStyles({
         }
     },
     link: {
-        fontWeight: "700 !important",
-        fontSize: "15px !important",
-        fontFamily: "'Urbanist', sans- serif !important",
+        fontWeight: "400 !important",
+        fontSize: "17px !important",
+        //fontFamily: "'Urbanist', sans- serif !important",
         
     },
     price: {
         marginTop: "5px !important",
         color: "red",
+        fontWeight: "500 !important",
+        fontSize: "23px !important",
         fontFamily: "'Urbanist', sans- serif !important",
     }
 })

@@ -83,7 +83,7 @@ export const mainRouter = [
         Component: ListProducts
     },
     {
-        path: "/list-products&categoryid=:id",
+        path: "/list-products&categoryid=:id&tendanhmuc=:tenDanhMuc",
         exact: false,
         Component: ListProducts
     },

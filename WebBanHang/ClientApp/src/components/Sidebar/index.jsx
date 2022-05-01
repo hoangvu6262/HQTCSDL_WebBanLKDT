@@ -58,18 +58,6 @@ const sidebarList = [
   },
 ];
 
-const adminUser = {
-  maKhachHang: 2,
-  tenDangNhap: "hoangvu22",
-  matKhau: "1234567",
-  anhDaiDien:
-    "https://vi.wikipedia.org/wiki/T%E1%BA%ADp_tin:Tr%C3%BAc_Anh_%E2%80%93_M%E1%BA%AFt_bi%E1%BA%BFc_BTS_(2).png",
-  email: "hoangvubg6262@gmail.com",
-  ten: "Hoang Vu",
-  diaChi: "brvt",
-  sdt: "065481523",
-  isAdmin: false,
-};
 
 function Sidebar(props) {
   const { window } = props;

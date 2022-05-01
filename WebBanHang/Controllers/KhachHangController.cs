@@ -154,6 +154,7 @@ namespace WebBanHang.Controllers
                     return Ok(new { 
                         id = user.Result.MaKhachHang,
                         account= user.Result.TenDangNhap,
+                        image = user.Result.AnhDaiDien,
                         token = userToken
                     });
                 }

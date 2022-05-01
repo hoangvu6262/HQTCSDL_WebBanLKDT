@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect} from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import {
     Divider,
     AppBar,
@@ -19,6 +19,8 @@ import {
     ListItemIcon,
     Hidden,
     Container,
+    Drawer,
+    Avatar
 } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -36,7 +38,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import ArticleIcon from '@mui/icons-material/Article';
 
-import { makeStyles, withStyles } from '@mui/styles';
+import MainDrawer from "../MainDrawer"
+
+import {withStyles } from '@mui/styles';
 
 
 const CustomAppBar = styled(AppBar)({
@@ -106,6 +110,8 @@ const AccountButton = styled(Button)(({ theme }) => ({
     marginLeft: "17px",
     //fontFamily: "'Urbanist', sans- serif",
     fontSize: "13px !important",
+    diplay: "flex",
+    alignItems: "center",
     "&:hover": {
         color: "#000",
         textDecoration: "none !important"
@@ -190,6 +196,7 @@ const MainHeader = (props) =>{
     const [display, setDisplay] = useState(true)
     const [showCategory, setShowCategory] = useState(false);
     const [show, setShow] = useState(false);
+    const [showDrawer, setShowDrawer] = useState(false);
 
     const location = useLocation();
 
@@ -210,6 +217,14 @@ const MainHeader = (props) =>{
 
     const handleLogOut = () => {
         dispatch(action("CUSTOMOR_LOGOUT", false));
+    }
+
+    const toggleDrawer = (open) => (event) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+
+        setShowDrawer(open);
     }
 
 
@@ -249,21 +264,40 @@ const MainHeader = (props) =>{
 
 
     useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY >= 600) {
-                setDisplay(false);
-                setShowCategory(true)
-            } else {
-                setDisplay(true)
-                setShowCategory(false)
+        if (location.pathname === "/") {
+            const handleScroll = () => {
+                if (window.scrollY >= 600) {
+                    setDisplay(false);
+                    setShowCategory(true)
+                } else {
+                    setDisplay(true)
+                    setShowCategory(false)
+                }
+            }
+            window.addEventListener("scroll", handleScroll)
+
+            return () => {
+                window.removeEventListener("scroll", handleScroll)
+            }
+        } else {
+            setShowCategory(true)
+            const handleScroll = () => {
+                if (window.scrollY >= 200) {
+                    setDisplay(false);
+                } else {
+                    setDisplay(true)
+                }
+            }
+            window.addEventListener("scroll", handleScroll)
+
+            return () => {
+                window.removeEventListener("scroll", handleScroll)
             }
         }
-        window.addEventListener("scroll", handleScroll)
+        
 
-        return () => {
-            window.removeEventListener("scroll", handleScroll)
-        }
-    }, [])
+        
+    }, [location.pathname])
 
 
     return (
@@ -279,9 +313,17 @@ const MainHeader = (props) =>{
                                 color="inherit"
                                 aria-label="open drawer"
                                 sx={{ mr: 2 }}
+                                onClick={toggleDrawer(true)}
                             >
                                 <MenuIcon />
                             </IconButton>
+                            <Drawer
+                                anchor="left"
+                                open={showDrawer}
+                                onClose={toggleDrawer(false)}
+                            >
+                                <MainDrawer toggleDrawer={toggleDrawer} />
+                            </Drawer>
                         </Hidden>
                         <Grid container>
                             <Grid item md={ 2} xs={3} style={{ padding: "10px 9px 10px 0px"}}>
@@ -305,36 +347,39 @@ const MainHeader = (props) =>{
 
                                 <Box sx={{ flexGrow: 1 }} />
                                 <Box sx={{ display: { xs: 'flex' } }}>
+                                    <Box>
+                                        {isCustomorLogin ? (
+                                            <>
+                                                <AccountButton aria-describedby={id} type="button" onClick={handleClick}>
+                                                    <Avatar src={customor.image} alt="account_image" sx={{ width: 28, height: 28, marginRight: "13px" }}/>
+                                                    {customor.account}
+                                                </AccountButton>
+                                                <AccountButton component={Link} to="/register" startIcon={<ArticleIcon style={{ fontSize: 29 }} />}>Khuyến mãi</AccountButton>
+                                                <AccountPopper id={id} open={open} anchorEl={anchorEl} transition disablePortal>
+                                                    {({ TransitionProps }) => (
+                                                        <Fade {...TransitionProps} timeout={350}>
+                                                            <AccToggle>
+                                                                {AccMenu()}
+                                                            </AccToggle>
+                                                        </Fade>
+                                                    )}
+                                                </AccountPopper>
+                                            </>
+                                        ) : <>
+                                                <AccountButton component={Link} to="/login" startIcon={<AccountCircleIcon style={{ fontSize: 29 }} />}>Đăng nhập</AccountButton>
+                                                <AccountButton component={Link} to="/register" startIcon={<AssignmentIndIcon style={{ fontSize: 29 }}/>}>Đăng ký</AccountButton>
+                                                <AccountButton component={Link} to="/register" startIcon={<ArticleIcon style={{ fontSize: 29 }} />}>Khuyến mãi</AccountButton>
+                                            
+                                        </>}
 
-                                    {isCustomorLogin ? (
-                                        <div>
-                                            <AccountButton aria-describedby={id} type="button" onClick={handleClick}>
-                                                {customor.account}
-                                            </AccountButton>
-                                            <AccountPopper id={id} open={open} anchorEl={anchorEl} transition disablePortal>
-                                                {({ TransitionProps }) => (
-                                                    <Fade {...TransitionProps} timeout={350}>
-                                                        <AccToggle>
-                                                            {AccMenu()}
-                                                        </AccToggle>
-                                                    </Fade>
-                                                )}
-                                            </AccountPopper>
-                                        </div>
-                                    ) : <Box>
-                                            <AccountButton component={Link} to="/login" startIcon={<AccountCircleIcon style={{ fontSize: 29 }} />}>Đăng nhập</AccountButton>
-                                            <AccountButton component={Link} to="/register" startIcon={<AssignmentIndIcon style={{ fontSize: 29 }}/>}>Đăng ký</AccountButton>
-                                            <AccountButton component={Link} to="/register" startIcon={<ArticleIcon style={{ fontSize: 29 }} />}>Khuyến mãi</AccountButton>
-                                            {location.pathname === "/cart" ? null : (
-                                                <CustomIconButton component={Link} to="/cart" size="large" aria-label="show 4 new mails" color="inherit">
-                                                    <Badge badgeContent={cart.quantity} color="error">
-                                                        <ShoppingBasketOutlinedIcon />
-                                                    </Badge>
-                                                </CustomIconButton>
-                                            )}
-                                    </Box>}
-
-                                    
+                                        {location.pathname === "/cart" ? null : (
+                                            <CustomIconButton component={Link} to="/cart" size="large" aria-label="show 4 new mails" color="inherit">
+                                                <Badge badgeContent={cart.quantity} color="error">
+                                                    <ShoppingBasketOutlinedIcon />
+                                                </Badge>
+                                            </CustomIconButton>
+                                        )}
+                                    </Box>
                                 </Box>
                             </Grid>
                         </Grid>

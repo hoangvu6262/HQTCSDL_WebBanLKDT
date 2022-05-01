@@ -10,14 +10,18 @@ import ProductDetailContainer from "../../../container/Main/ProductDetailContain
 import ProductDescriptionContainer from "../../../container/Main/ProductDescriptionContainer"
 import ProductCommentContainer from "../../../container/Main/ProductCommentContainer"
 
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 
 
 
 const useStyles = makeStyles({
     root: {
-        paddingTop: 20,
+        //paddingTop: 20,
         position: "relative",
+        "&.MuiContainer-maxWidthXl": {
+            maxWidth: 1310,
+        }
     },
     card: {
         marginBottom: 30,
@@ -32,6 +36,14 @@ const useStyles = makeStyles({
             fontFamily: "'Urbanist', sans- serif !important",
         },
     },
+    productDetailTittle: {
+        marginBottom: 20,
+        padding: "10px 5px",
+        backgroundColor: "#f8f8f8",
+        borderBottom: "1px solid #eee",
+        fontWeight: 400,
+        fontSize: 15
+    }
 })
 
 const MainProductDetail = () => {
@@ -56,7 +68,15 @@ const MainProductDetail = () => {
 
     return (
         <>
-            <Container className={classes.root}>
+            <div className={classes.productDetailTittle}>
+                <Container maxWidth="xl" className={classes.root}>
+                    <span>Bạn đang ở: </span>
+                    <a href="/">Trang chủ</a>
+                    <span><ArrowRightIcon />  - Học tập và Làm việc <ArrowRightIcon />{productDetail.tenSp} chính hãng</span>
+                </Container>
+            </div>
+            <Container maxWidth="xl" className={classes.root}>
+                
                 <div className={classes.card}>
                     <ProductDetailContainer productDetail={productDetail}/>
                     <ProductDescriptionContainer productDetail={productDetail} listRelatedProducts={listRelatedProducts} />
