@@ -61,7 +61,7 @@ const ProductContainer = ({ listProductsPaging, tittle}) => {
     return (
         <>
             <Container maxWidth="xl" className={classes.productContainer}>
-                    <div item xs={12} className={classes.viewAll}>
+                    <div  className={classes.viewAll}>
                         <Typography variant="h6" component="h6" align="center" className={classes.newProductTitle}>{tittle} - Miễn phí giao hàng</Typography>
                         <Button component={Link} to="/listproducts" className={classes.viewAllButton} endIcon={<ArrowForwardIosIcon className={ classes.arrowIcon}/>}>Xem tất cả</Button>
                     </div>

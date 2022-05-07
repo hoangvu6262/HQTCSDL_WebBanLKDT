@@ -1,4 +1,6 @@
 ﻿import {
+    GET_ALL_PRODUCT_SUCCESS,
+    GET_ALL_PRODUCT_FAIL,
     GET_ALL_PRODUCT_PAGING_SUCCESS,
     GET_ALL_PRODUCT_PAGING_FAIL,
     SEARCH_PRODUCTS_BY_NAME_SUCCESS,
@@ -22,6 +24,7 @@
 } from "../constants/product.constant";
 
 const initialState = {
+    listAllProducts: [],
     listProductsPaging: [],
     listRelatedProducts: [],
     productDetail: {
@@ -42,6 +45,10 @@ const ProductReducer = (state = initialState, action) => {
     const { type, payload } = action;
 
     switch (type) {
+        case GET_ALL_PRODUCT_SUCCESS:
+            return { ...state, listAllProducts: payload  }
+        case GET_ALL_PRODUCT_FAIL:
+            return { ...state }
         case GET_ALL_PRODUCT_PAGING_SUCCESS:
             return { ...state, listProductsPaging: payload.data, totalPage: payload.totalPages, PageNumber: payload.pageNumber }
         case GET_ALL_PRODUCT_PAGING_FAIL:
@@ -59,7 +66,7 @@ const ProductReducer = (state = initialState, action) => {
         case GET_PRODUCT_DETAIL_FAIL:
             return { ...state }
         case DELETE_PRODUCT_SUCCESS:
-            console.log(payload);
+            //console.log(payload);
             return { ...state, notification: payload };
         case DELETE_PRODUCT_FAIL:
             return { ...state, notification: payload };

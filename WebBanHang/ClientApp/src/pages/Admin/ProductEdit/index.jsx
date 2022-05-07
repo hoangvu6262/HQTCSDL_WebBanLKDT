@@ -2,12 +2,13 @@
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateProduct, GetProductDetailById } from "../../../redux/actions/product.action";
-import { Grid, Paper, Divider, Container, Box, TextField, Button, InputAdornment } from '@mui/material';
+import { Grid, Paper, Divider, Container, Box, TextField, Button, InputAdornment, FormControl, Select, MenuItem, InputLabel, FormHelperText } from '@mui/material';
 import { makeStyles, withStyles } from "@mui/styles";
 import * as yup from "yup";
 import { Formik } from "formik";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
+import { GetListCategory } from "../../../redux/actions/category.action"
 
 
 
@@ -35,7 +36,14 @@ const CssTextField = withStyles({
 })(TextField);
 
 const validationSchema = yup.object({
-    maDanhMuc: yup.number().required("Vui lòng chọn danh mục sản phẩm."),
+    maDanhMuc: yup.number().required("Vui lòng chọn danh mục sản phẩm.")
+        .test("ma danh muc", "Vui lòng chọn danh mục sản phẩm.", (value) => {
+            //console.log(value)
+            if (value === 0) {
+                return false
+            }
+            return true
+        }),
     tenSp: yup
         .string("Thêm tên sản phẩm")
         .required("Vui lòng thêm tên sản phẩm."),
@@ -103,8 +111,10 @@ const EditProduct = () => {
     const history = useHistory()
 
     const { productDetail } = useSelector((state) => state.product);
+    const { listCategory } = useSelector(state => state.category)
 
     useEffect(() => {
+        dispatch(GetListCategory())
         dispatch(GetProductDetailById(id))
     }, []);
 
@@ -134,6 +144,7 @@ const EditProduct = () => {
                         initialValues={initialValues}
                         validationSchema={validationSchema}
                         onSubmit={(values) => {
+                            console.log(values)
                             dispatch(UpdateProduct(id, values, history));
                         }}
                     >
@@ -166,26 +177,32 @@ const EditProduct = () => {
                                             }}
                                         />
 
-                                        <CssTextField
-                                            fullWidth
-                                            className={classes.formInput}
-                                            id="maDanhMuc"
-                                            name="maDanhMuc"
-                                            placeholder="Danh mục sản phẩm"
-                                            label="Danh mục sản phẩm"
-                                            variant="standard"
-                                            value={formik.values.maDanhMuc}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.maDanhMuc && Boolean(formik.errors.maDanhMuc)}
-                                            helperText={formik.touched.maDanhMuc && formik.errors.maDanhMuc}
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <LockOpenIcon style={{ color: "#495057" }} />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        />
+                                        <FormControl sx={{ height: 70, minWidth: "100%", marginTop: "10px" }}>
+                                            <InputLabel sx={{ marginTop: 0 }}>Danh mục sản phẩm</InputLabel>
+                                            <Select
+                                                id="maDanhMuc"
+                                                name="maDanhMuc"
+                                                value={formik.values.maDanhMuc}
+                                                onChange={(e) => {
+                                                    formik.setFieldValue("maDanhMuc", e.target.value)
+
+                                                }}
+                                                error={formik.touched.maDanhMuc && Boolean(formik.errors.maDanhMuc)}
+                                                variant="standard"
+                                                displayEmpty
+                                                inputProps={{ 'aria-label': 'Without label' }}
+                                            >
+                                                <MenuItem value={0}>
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                {listCategory.map((category) => {
+                                                    return (
+                                                        <MenuItem key={category.maDanhMuc} value={category.maDanhMuc}>{category.tenDanhMuc}</MenuItem>
+                                                    );
+                                                })}
+                                            </Select>
+                                            <FormHelperText error={ true}>{formik.touched.maDanhMuc && formik.errors.maDanhMuc }</FormHelperText>
+                                        </FormControl>
                                         <CssTextField
                                             fullWidth
                                             className={classes.formInput}
@@ -209,6 +226,7 @@ const EditProduct = () => {
 
                                         <CssTextField
                                             fullWidth
+                                            multiline
                                             className={classes.formInput}
                                             id="moTa"
                                             name="moTa"
@@ -219,12 +237,14 @@ const EditProduct = () => {
                                             onChange={formik.handleChange}
                                             error={formik.touched.moTa && Boolean(formik.errors.moTa)}
                                             helperText={formik.touched.moTa && formik.errors.moTa}
+                                            
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">
                                                         <LockOpenIcon style={{ color: "#495057" }} />
                                                     </InputAdornment>
                                                 ),
+                                                maxlength: 500000
                                             }}
                                         />
                                     </Grid>

@@ -47,8 +47,10 @@ const useStyles = makeStyles({
         fontSize: "15px !important",
     },
     pagination: {
-        padding: "15px 0",
-
+        padding: "30px",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center"
     }
 });
 

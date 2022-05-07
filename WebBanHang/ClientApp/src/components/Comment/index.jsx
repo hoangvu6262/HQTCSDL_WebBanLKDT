@@ -1,6 +1,6 @@
 ﻿import React, { useState} from "react";
 import CustomToggleButton from "../CustomToggleButton";
-import { InputBase, Button, Divider } from "@mui/material";
+import { InputBase, Button } from "@mui/material";
 import { styled } from "@mui/styles";
 
 const InputAdd = styled('div')({
@@ -35,9 +35,9 @@ const Comment = (props) => {
                 />
             </InputAdd>
             <AddButton>
-                <Button variant="outlined" color="info" onClick={() => onClickAddComment(addComment, setAddComment)}>Add comment</Button>
+                <Button variant="outlined" color="info" onClick={() => onClickAddComment(addComment, setAddComment)}>Thêm bình luận</Button>
             </AddButton>
-            <Divider />
+            
         </div>
     );
 }

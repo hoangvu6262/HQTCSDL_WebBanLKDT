@@ -46,7 +46,10 @@ const useStyles = makeStyles({
         fontSize: "15px !important",
     },
     pagination: {
-        padding: "15px 0",
+        padding: "30px",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center"
 
     }
 });
@@ -74,12 +77,12 @@ export default function UsersTable(props) {
     const history = useHistory();
 
     useEffect(() => {
-        dispatch(GetAllUserPaging(1, 3));
+        dispatch(GetAllUserPaging(1, 6));
     }, [])
 
 
     const handleChangePage = (e, value) => {
-        dispatch(GetAllUserPaging(value, 3));
+        dispatch(GetAllUserPaging(value, 6));
     }
 
     const handleOnclickDetail = (id) => {

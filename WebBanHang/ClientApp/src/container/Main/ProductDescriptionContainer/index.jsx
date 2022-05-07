@@ -16,7 +16,7 @@ const useStyles = makeStyles({
             fontSize: 15,
             fontWeight: 400,
             color: "rgb(33, 43, 54)",
-            fontFamily: "'Urbanist', sans- serif !important",
+            //fontFamily: "'Urbanist', sans- serif !important",
         },
     },
     appbar: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
         backgroundColor: "rgb(244 246 248) !important",
         color: "rgb(33, 43, 54) !important",
         fontWeight: 600,
-        fontFamily: "'Urbanist', sans- serif !important",
+        //fontFamily: "'Urbanist', sans- serif !important",
         boxShadow: "none !important",
     },
 
@@ -45,13 +45,13 @@ const ProductDescriptionContainer = ({ productDetail, listRelatedProducts }) => 
         <>
             <Box className={classes.productDetailDescription}>
                 <AppBar position="static" className={classes.appbar}>
-                    Discription
+                    Mô tả sản phẩm
                     </AppBar>
                 <p>{productDetail.moTa}</p>
             </Box>
             <Box className={classes.productDetailDiscription}>
                 <AppBar position="static" className={classes.appbar}>
-                    Realated Products
+                    Sản phẩm liên quan
                     </AppBar>
                 <div className={classes.relatedProducts}>
                     <Grid container spacing={2}>

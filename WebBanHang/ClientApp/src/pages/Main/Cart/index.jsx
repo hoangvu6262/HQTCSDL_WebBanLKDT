@@ -6,6 +6,7 @@ import { Grid, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { CheckOut, AddBillDetail } from "../../../redux/actions/bill.action";
 import Notification from "../../../components/Notification"
+import AlertDialog from "../../../components/Dialog/AlertDialog"
 
 const useStyles = makeStyles({
     root: {
@@ -55,6 +56,7 @@ const useStyles = makeStyles({
 })
 
 const Cart = () => {
+    const [open, setOpen] = React.useState(false);
     const { cart } = useSelector(state => state.product);
     const { notification } = useSelector((state) => state.bill);
     const { isCustomorLogin, customor } = useSelector(state => state.user);
@@ -76,6 +78,8 @@ const Cart = () => {
         ))
     }
 
+    
+
     const { products } = cart;
 
     const handleCheckout = () => {
@@ -85,9 +89,13 @@ const Cart = () => {
                 tongTien: cart.total,
                 chiTietHoaDons: products
             }))
+        } else {
+            setOpen(true);
         }
         
     }
+
+    
 
     return (
         <div className={classes.root}>
@@ -130,6 +138,7 @@ const Cart = () => {
                 </Grid>
             </Grid>
             <Notification notifyAlert={notification} />
+            <AlertDialog open={open} setOpen={setOpen} />
         </div>
     );
 }

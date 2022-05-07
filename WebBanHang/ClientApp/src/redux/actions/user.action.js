@@ -19,9 +19,28 @@ import {
     DELETE_USER_SUCCESS,
     DELETE_USER_FAIL,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    GET_ALL_USERS_SUCCESS,
+    GET_ALL_USERS_FAIL
 } from "../constants/user.constant";
 import action from './action';
+
+
+//Get all users
+export const GetAllUser = () => {
+    return (dispatch) => {
+        axios.get(`http://localhost:31051/api/KhachHang/GetAllCustomors`)
+            .then((res) => {
+                console.log(res.data);
+
+                dispatch(action(GET_ALL_USERS_SUCCESS, res.data))
+            })
+            .catch((err) => {
+                console.log(err);
+                dispatch(action(GET_ALL_USERS_FAIL, err))
+            })
+    }
+}
 
 
 // Get list user paging

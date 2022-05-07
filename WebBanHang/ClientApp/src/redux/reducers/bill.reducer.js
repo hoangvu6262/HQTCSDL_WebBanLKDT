@@ -1,4 +1,6 @@
 ﻿import {
+    GET_ALL_BILL_SUCCESS,
+    GET_ALL_BILL_FAIL,
 	GET_BILLS_PAGING_SUCCESS,
 	GET_BILLS_PAGING_FAIL,
 	GET_BILL_DETAIL_SUCCESS,
@@ -22,6 +24,7 @@
 } from "../constants/Bill.constant";
 
 const initState = {
+    listAllBills: [],
 	listBillsPaging: [],
 	billDetail: {},
 	totalPage: 0,
@@ -33,6 +36,10 @@ const BillReducer = (state = initState, action) => {
     const { type, payload } = action;
 
     switch (type) {
+        case GET_ALL_BILL_SUCCESS:
+            return { ...state, listAllBills: payload }
+        case GET_ALL_BILL_FAIL:
+            return { ...state }
         case GET_BILLS_PAGING_SUCCESS:
             return { ...state, listBillsPaging: payload.data, totalPage: payload.totalPages, PageNumber: payload.pageNumber }
         case GET_BILLS_PAGING_FAIL:

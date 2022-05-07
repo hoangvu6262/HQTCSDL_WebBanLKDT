@@ -1,4 +1,9 @@
-﻿
+﻿// lấy danh sách tất cả sản phẩm
+export const GET_ALL_PRODUCT_SUCCESS = "GET_ALL_PRODUCT_SUCCESS";
+export const GET_ALL_PRODUCT_FAIL = "GET_ALL_PRODUCT_FAIL";
+
+
+
 // lấy danh sách sản phẩn phân trang
 export const GET_ALL_PRODUCT_PAGING_SUCCESS = "GET_ALL_PRODUCT_PAGING_SUCCESS";
 export const GET_ALL_PRODUCT_PAGING_FAIL = "GET_ALL_PRODUCT_PAGING_FAIL";

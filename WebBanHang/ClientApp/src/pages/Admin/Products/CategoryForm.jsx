@@ -72,7 +72,7 @@ export default function CategoryForm(props) {
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
                     console.log(values);
-                    //dispatch(AddCategory(values, openDialog, setOpenDialog));
+                    dispatch(AddCategory(values, openDialog, setOpenDialog));
                 }}
             >
                 {(formik) => (

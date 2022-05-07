@@ -1,4 +1,9 @@
-﻿// lấy danh sách người dùng có phân trang
+﻿// lấy toàn bộ danh sách người dùng
+export const GET_ALL_USERS_SUCCESS = "GET_ALL_USERS_SUCCESS";
+export const GET_ALL_USERS_FAIL = "GET_ALL_USERS_FAIL";
+
+
+// lấy danh sách người dùng có phân trang
 export const GET_USERS_PAGING_SUCCESS = "GET_USERS_PAGING_SUCCESS";
 export const GET_USERS_PAGING_FAIL = "GET_USERS_PAGING_FAIL";
 

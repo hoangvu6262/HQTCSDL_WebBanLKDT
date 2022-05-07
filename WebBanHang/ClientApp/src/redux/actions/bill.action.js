@@ -1,6 +1,8 @@
 ﻿import axios from "axios";
 import action from "./action";
 import {
+    GET_ALL_BILL_SUCCESS,
+    GET_ALL_BILL_FAIL,
 	GET_BILLS_PAGING_SUCCESS,
 	GET_BILLS_PAGING_FAIL,
 	GET_BILL_DETAIL_SUCCESS,
@@ -20,8 +22,53 @@ import {
 	PUT_AD_CONFIRM_SUCCESS,
 	PUT_AD_CONFIRM_FAIL,
 	GET_BILLS_BY_STATUS_SUCCESS,
-	GET_BILLS_BY_STATUS_FAIL
+    GET_BILLS_BY_STATUS_FAIL,
+    GET_HOA_DON_ID_AUTO_SUCCESS,
+    GET_HOA_DON_ID_AUTO_FAIL,
+    UPDATE_AUTO_HOA_DON_ID_SUCCESS,
+    UPDATE_AUTO_HOA_DON_ID_FAIL
 } from "../constants/Bill.constant";
+
+
+// GET AUTO HOADONID
+export const GetAutoHoaDonID = () => {
+    return (dispatch) => {
+        axios.get(`http://localhost:31051/api/HoaDon/GetAutoHoaDonId`)
+            .then((res) => {
+                dispatch(action(GET_HOA_DON_ID_AUTO_SUCCESS, res.data));
+            })
+            .catch((err) => {
+                dispatch(action(GET_HOA_DON_ID_AUTO_FAIL, err));
+            })
+    }
+}
+
+// update auto HoaDonID
+export const UpdateAutoHoaDonID = (id) => {
+    return (dispatch) => {
+        axios.put("")
+            .then((res)=> {
+                dispatch(action(UPDATE_AUTO_HOA_DON_ID_SUCCESS, res.data));
+            })
+            .catch((err) => {
+                dispatch(action(UPDATE_AUTO_HOA_DON_ID_FAIL, err));
+            })
+    }
+}
+
+// GET ALL BILL
+export const GetAllBills = () => {
+    return (dispatch) => {
+        axios.get(`http://localhost:31051/api/HoaDon/GetAllBills`)
+            .then((res) => {
+                dispatch(action(GET_ALL_BILL_SUCCESS, res.data));
+            })
+            .catch((err) => {
+                dispatch(action(GET_ALL_BILL_FAIL, err));
+            })
+    }
+}
+
 
 
 // get list bills paging

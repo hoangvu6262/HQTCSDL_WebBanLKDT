@@ -16,11 +16,14 @@
     SET_ADMIN_ROLE_SUCCESS,
     SET_ADMIN_ROLE_FAIL,
     DELETE_USER_SUCCESS,
-    DELETE_USER_FAIL
+    DELETE_USER_FAIL,
+    GET_ALL_USERS_SUCCESS,
+    GET_ALL_USERS_FAIL
 } from "../constants/user.constant";
 
 
 const intialState = {
+    listAllUsers: [],
     listUsersPaging: [],
     userDetail: {},
     totalPage: 0,
@@ -36,6 +39,10 @@ const UserReducer = (state = intialState, action) => {
     const { type, payload } = action;
 
     switch (type) {
+        case GET_ALL_USERS_SUCCESS:
+            return { ...state, listAllUsers: payload }
+        case GET_ALL_USERS_FAIL:
+            return { ...state }
         case GET_USERS_PAGING_SUCCESS:
             return { ...state, listUsersPaging: payload.data, totalPage: payload.totalPages, PageNumber: payload.pageNumber }
         case GET_USERS_PAGING_FAIL:

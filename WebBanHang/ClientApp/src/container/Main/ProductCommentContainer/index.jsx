@@ -1,14 +1,18 @@
-﻿import React from "react";
-import { Divider, Box, AppBar, IconButton, Typography } from '@mui/material';
+﻿import React, { useEffect} from "react";
+import { Divider, Box, AppBar, Typography, Avatar } from '@mui/material';
 import { makeStyles } from "@mui/styles";
 import { styled } from '@mui/material/styles';
 import Comment from "../../../components/Comment";
 import { useDispatch } from "react-redux";
 import { GetProductDetailById } from "../../../redux/actions/product.action";
 import { AddComment } from "../../../redux/actions/comment.action";
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { GetAllUser } from "../../../redux/actions/user.action"
+import { useSelector } from "react-redux"
+
 
 const CommentContainer = styled('div')({
+    display: "flex",
+    width: "100%",
     padding: 15,
     "& p": {
         padding: 0,
@@ -16,11 +20,17 @@ const CommentContainer = styled('div')({
 })
 
 const CommentTitle = styled('div')({
+    //marginLeft: 25,
     display: "flex",
     justifyContent: "space-between",
     "& h6": {
-        fontFamily: "'Urbanist', sans- serif !important",
-        fontWeight: 600
+        fontSize: 14,
+        //fontFamily: "'Urbanist', sans- serif !important",
+        fontWeight: 400,
+        "& span": {
+            fontWeight: 200,
+            fontSize: 11
+        }
     }
 
 })
@@ -30,12 +40,12 @@ const useStyles = makeStyles({
         marginTop: 15,
         borderRadius: "0px !important",
         "& p": {
-            padding: "20px",
+            padding: "0px 20px 20px 0px",
             marginBottom: 0,
             fontSize: 15,
             fontWeight: 400,
             color: "rgb(33, 43, 54)",
-            fontFamily: "'Urbanist', sans- serif !important",
+            //fontFamily: "'Urbanist', sans- serif !important",
         },
     },
     appbar: {
@@ -46,6 +56,10 @@ const useStyles = makeStyles({
         fontFamily: "'Urbanist', sans- serif !important",
         boxShadow: "none !important",
     },
+    imageAcountComment: {
+        marginRight: 25
+    }
+
 })
 
 const ProductCommentContainer = ({ id, customor, productDetail }) => {
@@ -53,20 +67,53 @@ const ProductCommentContainer = ({ id, customor, productDetail }) => {
 
     const dispatch = useDispatch();
 
+    const { listAllUsers } = useSelector(state => state.user)
+
+
+    useEffect(() => {
+        dispatch(GetAllUser());
+    }, [])
+
+
+    const rederUserComment = (id) => {
+        let index = 0;
+        for (let i = 0; i < listAllUsers.length; i++) {
+            if (listAllUsers[i].maKhachHang === id) {
+                index = i
+            }
+        }
+        const userComment = {
+            account: listAllUsers[index].tenDangNhap,
+            image: listAllUsers[index].anhDaiDien
+        }
+
+        return userComment
+    }
+
+
+    const renderTimeComment = (time) => {
+        return time.split("T")[0];
+    }
+
     const renderListComments = (comments) => {
         return comments.map((comment) => {
             return (
                 <>
                     <CommentContainer key={comment.maBl}>
-                        <CommentTitle>
-                            <Typography variant="subtitle1" component="h6">
-                                Mã Khách Hàng: {comment.maKhachHang} - {comment.thoiGian}
-                            </Typography>
-                            <IconButton>
-                                <DeleteForeverOutlinedIcon />
-                            </IconButton>
-                        </CommentTitle>
-                        <p> {comment.noiDungBinhLuan} </p>
+                        <div className={classes.imageAcountComment}>
+                            <Avatar alt={rederUserComment(comment.maKhachHang).account} src={rederUserComment(comment.maKhachHang).image} />
+                            
+                        </div>
+                        <div>
+                            <CommentTitle>
+                                <Typography variant="subtitle1" component="h6">
+                                    {rederUserComment(comment.maKhachHang).account} - <span>{renderTimeComment(comment.thoiGian)}</span>
+                                </Typography>
+
+                            </CommentTitle>
+                            <p> {comment.noiDungBinhLuan} </p>
+                        </div>
+                        
                     </CommentContainer>
                     <Divider />
                 </>
@@ -91,9 +138,11 @@ const ProductCommentContainer = ({ id, customor, productDetail }) => {
         <>
             <Box className={classes.productDetailComment}>
                 <AppBar position="static" className={classes.appbar}>
-                    Comments
+                    Bình luận
                     </AppBar>
                 <Comment onClickAddComment={handleAddComment} />
+                <p>{productDetail.binhLuans.length} Comments</p>
+                <Divider />
                 {productDetail.binhLuans.length > 0 ? renderListComments(productDetail.binhLuans) : (<p>No Comment.</p>)}
             </Box>
         </>

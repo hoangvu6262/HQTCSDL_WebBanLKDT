@@ -1,4 +1,17 @@
-﻿//get bills list paging
+﻿// get HoaDonID auto
+export const GET_HOA_DON_ID_AUTO_SUCCESS = "GET_HOA_DON_ID_AUTO_SUCCESS";
+export const GET_HOA_DON_ID_AUTO_FAIL = "GET_HOA_DON_ID_AUTO_FAIL";
+
+// update auto HoaDonID 
+export const UPDATE_AUTO_HOA_DON_ID_SUCCESS = "UPDATE_AUTO_HOA_DON_ID_SUCCESS"
+export const UPDATE_AUTO_HOA_DON_ID_FAIL = "UPDATE_AUTO_HOA_DON_ID_FAIL"
+
+//get all bill
+export const GET_ALL_BILL_SUCCESS = "GET_ALL_BILL_SUCCESS";
+export const GET_ALL_BILL_FAIL = "GET_ALL_BILL_FAIL";
+
+
+//get bills list paging
 export const GET_BILLS_PAGING_SUCCESS = "GET_BILLS_PAGING_SUCCESS";
 export const GET_BILLS_PAGING_FAIL = "GET_BILLS_PAGING_FAIL";
 

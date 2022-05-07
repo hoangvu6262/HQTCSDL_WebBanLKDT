@@ -79,7 +79,7 @@ export default function User() {
         if (e.target.value !== "") {
             dispatch(SearchUserByName(e.target.value))
         } else {
-            dispatch(GetAllUserPaging(PageNumber, 3))
+            dispatch(GetAllUserPaging(PageNumber, 6))
         }
     }
 

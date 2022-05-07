@@ -16,8 +16,25 @@ import {
     GET_PRODUCTS_BY_CATEGORY_SUCCESS,
     GET_PRODUCTS_BY_CATEGORY_FAIL,
     GET_RELATED_PRODUCTS_SUCCESS,
-    GET_RELATED_PRODUCTS_FAIL
+    GET_RELATED_PRODUCTS_FAIL,
+    GET_ALL_PRODUCT_SUCCESS,
+    GET_ALL_PRODUCT_FAIL
 } from "../constants/product.constant";
+
+
+// lấy danh sách tất cả sản phẩm
+export const GetAllProducts = () => {
+    return (dispatch) => {
+        axios.get(`http://localhost:31051/api/SanPham/GetAllProducts`)
+            .then((res) => {
+                //console.log(res.data);
+                dispatch(action(GET_ALL_PRODUCT_SUCCESS, res.data));
+            })
+            .catch((err) => {
+                dispatch(action(GET_ALL_PRODUCT_FAIL, err));
+            })
+    }
+}
 
 
 // lấy danh sách sản phâm có phân trang

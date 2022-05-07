@@ -42,7 +42,7 @@ const useStyles = makeStyles({
             fontSize: 18,
             fontWeight: 400,
             color: "rgb(33, 43, 54)",
-            fontFamily: "'Urbanist', sans- serif !important",
+            //fontFamily: "'Urbanist', sans- serif !important",
         },
     },
 
@@ -60,7 +60,7 @@ const useStyles = makeStyles({
             fontSize: 20,
             fontWeight: 400,
             color: "rgb(33, 43, 54)",
-            fontFamily: "'Urbanist', sans- serif !important",
+            //fontFamily: "'Urbanist', sans- serif !important",
         },
     },
     alert: {
@@ -176,7 +176,7 @@ const ProductDetailContainer = ({ productDetail}) => {
                         <div className={classes.category}>
                             
                             <div className={classes.price}>
-                                <p>Price</p>
+                                <p>Giá</p>
                                 <p style={{ color: "rgb(255, 72, 66)" }}>
                                     {parseInt(productDetail.donGia).toLocaleString('vi-VN', {
                                         style: 'currency',
@@ -186,7 +186,7 @@ const ProductDetailContainer = ({ productDetail}) => {
                             </div>
 
                             <div className={classes.price}>
-                                <p>Quantity </p>
+                                <p>Số Lượng </p>
                                 <div className={classes.quantity}>
                                     <IconButton onClick={handleMinusQuantity} className={classes.button} disabled={cartQuantity === 1 ?? false}>
                                         <IndeterminateCheckBoxIcon />
@@ -198,7 +198,7 @@ const ProductDetailContainer = ({ productDetail}) => {
                                 </div>
                             </div>
                             <div className={classes.price}>
-                                <p>Available: {productDetail.soLuongCon} </p>
+                                <p>Có sẵn: {productDetail.soLuongCon} </p>
                             </div>
                             <div className={classes.buttonGroup}>
                                 <Button
@@ -208,7 +208,7 @@ const ProductDetailContainer = ({ productDetail}) => {
                                     onClick={() => handleAddToCart(productDetail)}
                                     disabled={productDetail.soLuongCon === 0 ?? true}
                                 >
-                                    Add to Cart
+                                    Thêm vào giỏ hàng
                                     </Button>
                             </div>
                         </div>

@@ -7,14 +7,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import Chip from "@mui/material/Chip";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Pagination from '../../../components/Pagiantion';
-import KeyboardIcon from '@mui/icons-material/Keyboard';
+import { GetListCategory } from "../../../redux/actions/category.action"
 import { GetAllProductPaging, DeleteProduct } from '../../../redux/actions/product.action';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -47,8 +46,11 @@ const useStyles = makeStyles({
     color: "#fff",
     fontSize: "15px !important",
   },
-  pagination: {
-    padding: "15px 0",
+    pagination: {
+      padding: "30px",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center"
 
   }
 });
@@ -69,11 +71,13 @@ export default function ProductsTable(props) {
     //const { rows } = props;
 
     const { listProductsPaging, totalPage, PageNumber } = useSelector((state) => state.product);
+    const { listCategory } = useSelector(state => state.category)
 
     const dispatch = useDispatch();
     const history = useHistory();
 
     useEffect(() => {
+        dispatch(GetListCategory())
         dispatch(GetAllProductPaging(1, 5));
     }, [])
 
@@ -95,19 +99,16 @@ export default function ProductsTable(props) {
         dispatch(DeleteProduct(id));
     }
 
+
     const renderCategory = (categoryId) => {
-        switch (categoryId) {
-            case 1:
-                return (<Chip color="primary" variant="outlined" label="Màn hình" />);
-            case 2:
-                return (<Chip color="primary" variant="outlined" label="Bàn phím" />);
-            case 3:
-                return (<Chip color="primary" variant="outlined" label="Tai nghe" />);
-            case 4:
-                return (<Chip color="primary" variant="outlined" label="Chuột" />);
-            default:
-                return (<Chip color="primary" variant="outlined" label="Màn hình" />);
+        let index = 0;
+        for (let i = 0; i < listCategory.length; i++) {
+            if (listCategory[i].maDanhMuc === categoryId) {
+                index = i;
+            }
         }
+
+        return listCategory[index].tenDanhMuc
     }
 
     return (

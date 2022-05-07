@@ -41,7 +41,11 @@ const useStyles = makeStyles({
         border: "none",
       },
     },
-  },
+    },
+    addCategory: {
+        display: "flex",
+        justifyContent: "flex-end"
+    }
 });
 
 
@@ -119,7 +123,7 @@ export default function Products() {
                                   onChange={handleSearchProducts}
                               />
                           </Grid>
-                          <Grid item md={2} xs={4 }>
+                          <Grid item md={2} xs={4} className={ classes.addCategory}>
                               <Button variant="outlined" color="info" onClick={ handleAddCategory}>Add Category</Button>
                           </Grid>
                       </Grid>

@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     stackContent: {
         paddingTop: "7px !important",
         paddingBottom: "0px !important",
-        
+        paddingLeft: "5px !important"
 
     },
     routerlink: {
