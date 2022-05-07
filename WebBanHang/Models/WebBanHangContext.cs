@@ -17,7 +17,6 @@ namespace WebBanHang.Models
         {
         }
 
-        public virtual DbSet<AutoId> AutoIds { get; set; }
         public virtual DbSet<BinhLuan> BinhLuans { get; set; }
         public virtual DbSet<ChiTietGioHang> ChiTietGioHangs { get; set; }
         public virtual DbSet<ChiTietHoaDon> ChiTietHoaDons { get; set; }
@@ -42,17 +41,6 @@ namespace WebBanHang.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
-            modelBuilder.Entity<AutoId>(entity =>
-            {
-                entity.HasKey(e => e.IdName);
-
-                entity.ToTable("AutoID");
-
-                entity.Property(e => e.IdName).HasMaxLength(50);
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-            });
 
             modelBuilder.Entity<BinhLuan>(entity =>
             {
@@ -119,11 +107,13 @@ namespace WebBanHang.Models
                 entity.HasOne(d => d.MaHoaDonNavigation)
                     .WithMany(p => p.ChiTietHoaDons)
                     .HasForeignKey(d => d.MaHoaDon)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__ChiTietHo__MaHoa__32E0915F");
 
                 entity.HasOne(d => d.MaSpNavigation)
                     .WithMany(p => p.ChiTietHoaDons)
                     .HasForeignKey(d => d.MaSp)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__ChiTietHoa__MaSP__31EC6D26");
             });
 
@@ -171,6 +161,7 @@ namespace WebBanHang.Models
                 entity.HasOne(d => d.MaKhachHangNavigation)
                     .WithMany(p => p.HoaDons)
                     .HasForeignKey(d => d.MaKhachHang)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__HoaDon__MaKhachH__300424B4");
             });
 
