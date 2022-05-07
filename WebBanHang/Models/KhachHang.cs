@@ -10,6 +10,7 @@ namespace WebBanHang.Models
         public KhachHang()
         {
             BinhLuans = new HashSet<BinhLuan>();
+            GioHangs = new HashSet<GioHang>();
             HoaDons = new HashSet<HoaDon>();
         }
 
@@ -24,6 +25,7 @@ namespace WebBanHang.Models
         public bool? IsAdmin { get; set; }
 
         public virtual ICollection<BinhLuan> BinhLuans { get; set; }
+        public virtual ICollection<GioHang> GioHangs { get; set; }
         public virtual ICollection<HoaDon> HoaDons { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace WebBanHang.Models
         public SanPham()
         {
             BinhLuans = new HashSet<BinhLuan>();
+            ChiTietGioHangs = new HashSet<ChiTietGioHang>();
             ChiTietHoaDons = new HashSet<ChiTietHoaDon>();
         }
 
@@ -27,6 +28,7 @@ namespace WebBanHang.Models
 
         public virtual DanhMuc MaDanhMucNavigation { get; set; }
         public virtual ICollection<BinhLuan> BinhLuans { get; set; }
+        public virtual ICollection<ChiTietGioHang> ChiTietGioHangs { get; set; }
         public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; }
     }
 }

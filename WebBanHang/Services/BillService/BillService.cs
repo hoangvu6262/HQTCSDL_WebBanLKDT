@@ -23,12 +23,29 @@ namespace WebBanHang.Services.BillService
         // Add Bill
         public async Task<int> AddBill(HoaDon insert)
         {
-            var MaKhachHangParam = new SqlParameter("@MaKhachHang", insert.MaKhachHang);
-            var TongTienParam = new SqlParameter("@TongTien", insert.TongTien);
+            //var MaHoaDonParam = new SqlParameter("@MaHoaDon", id);
+            //var MaKhachHangParam = new SqlParameter("@MaKhachHang", insert.MaKhachHang); 
+            //var TongTienParam = new SqlParameter("@TongTien", insert.TongTien);
 
-            return await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertHD @MaKhachHang, @TongTien",
-                    MaKhachHangParam, TongTienParam);
+            //return await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertHD @MaHoaDon, @MaKhachHang, @TongTien",MaHoaDonParam, MaKhachHangParam, TongTienParam);
+            _context.HoaDons.Add(insert);
+            return await _context.SaveChangesAsync();
         }
+
+
+        // add bill detail
+        public async Task<int> AddBillDetail(int? MaSp, int id, int? SoLuong, decimal? DonGia)
+        {
+            var MaSpParam = new SqlParameter("@MaSP", MaSp);
+            var MaHoaDonParam = new SqlParameter("@MaHoaDon", id);
+            var SoLuongParam = new SqlParameter("@Soluong", SoLuong);
+            var DonGiaParam = new SqlParameter("@DonGia", DonGia);
+
+            return await _context.Database.ExecuteSqlRawAsync("exec Sp_InsertCTHD @MaSP, @MaHoaDon, @SoLuong, @DonGia",
+                    MaSpParam, MaHoaDonParam, SoLuongParam, DonGiaParam);
+        }
+
+
 
 
         // Check MaHoaDon
@@ -64,6 +81,12 @@ namespace WebBanHang.Services.BillService
             return await _context.HoaDons.FromSqlRaw("SELECT * FROM[dbo].[F_SelectHD]()").ToListAsync();
         }
 
+
+        // get auto HoaDonID
+        public async Task<AutoId> GetAutoHoaDonID()
+        {
+            return await _context.AutoIds.FirstOrDefaultAsync(a => a.IdName == "HoaDon");
+        }
 
         // Get Bill By Id
         public async Task<ActionResult<HoaDon>> GetBillById(int id)
@@ -149,6 +172,13 @@ namespace WebBanHang.Services.BillService
             var MaHoaDonParam = new SqlParameter("@MaHoaDon", id);
 
             return await _context.Database.ExecuteSqlRawAsync("exec Sp_CusConfir3 @MaHoaDon", MaHoaDonParam);
+        }
+
+        public async Task<int> UpadteAutoHoaDonID(string IdName, int autoHoaDonID)
+        {
+            var IdNameParam = new SqlParameter("@IdName", IdName );
+            var AutoHoaDonIdParam = new SqlParameter("@ID", autoHoaDonID);
+            return await _context.Database.ExecuteSqlRawAsync("exec Sp_UpdateHoaDonID @IdName, @ID", IdNameParam, AutoHoaDonIdParam);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace WebBanHang.Controllers
             var hoaDon = await _billservice.GetBillDetail(id);
             if (hoaDon == null)
             {
-                return NotFound("Custom Not Found!");
+                return NotFound("Bill Not Found!");
             }
 
             return hoaDon;
@@ -78,8 +78,7 @@ namespace WebBanHang.Controllers
         public async Task<ActionResult<HoaDon>> AddBill(HoaDon insert)
         {
             await _billservice.AddBill(insert);
-
-            return Ok("add success");
+            return CreatedAtAction("GetBill", new { id = insert.MaHoaDon }, insert);
 
         }
 
@@ -181,5 +180,7 @@ namespace WebBanHang.Controllers
             }
             
         }
+
+        
     }
 }

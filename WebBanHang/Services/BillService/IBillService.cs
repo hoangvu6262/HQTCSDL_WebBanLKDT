@@ -45,5 +45,15 @@ namespace WebBanHang.Services.BillService
 
         // check out order
         Task<int> CheckOutOrder(HoaDon insert);
+
+        // get auto HoaDonID
+        Task<AutoId> GetAutoHoaDonID();
+
+        // upadte auto HoaDonID
+        Task<int> UpadteAutoHoaDonID(string IdName, int autoHoaDonID);
+
+        // add bill detail
+        Task<int> AddBillDetail(int? MaSp, int id, int? SoLuong, decimal? DonGia);
+
     }
 }
